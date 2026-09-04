@@ -1,20 +1,24 @@
-CC     = gcc
-CFLAGS = -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2
-CXX      = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2
-LDFLAGS = $(shell pkg-config --libs sdl3)
+CC       := gcc
+CFLAGS   := -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2
+CXX      := g++
+CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2
+LDFLAGS  := -static $(shell pkg-config --static --libs sdl3)
+RC       := windres
 
-TARGET   = FunkinEverywhere
-SRC_DIR  := source
-BUILD_DIR:= export
-EXE_DIR:= bin
+TARGET  = FunkinEverywhere
+SRC_DIR := source
+RC_DIR := art/windows
+BUILD_DIR := export
+EXE_DIR := bin
 
 C_SRCS   := $(shell find $(SRC_DIR) -name "*.c")
 CPP_SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
+RC_SRCS  := $(shell find $(RC_DIR) -name "*.rc")
 
 C_OBJS   := $(patsubst %.c, $(BUILD_DIR)/%.o, $(C_SRCS))
 CPP_OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(CPP_SRCS))
-ALL_OBJS := $(C_OBJS) $(CPP_OBJS)
+RC_OBJS  := $(patsubst %.rc, $(BUILD_DIR)/%.o, $(RC_SRCS))
+ALL_OBJS := $(C_OBJS) $(CPP_OBJS) $(RC_OBJS)
 
 DEPS     := $(ALL_OBJS:.o=.d)
 
@@ -31,9 +35,13 @@ $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
+$(BUILD_DIR)/%.o: %.rc
+	@mkdir -p $(dir $@)
+	@$(RC) $(INCLUDES) $< $@
+
 -include $(DEPS)
 
 .PHONY: all clean
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(ALL_OBJS) $(TARGET)
