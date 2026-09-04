@@ -1,0 +1,39 @@
+CC     = gcc
+CFLAGS = -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2
+CXX      = g++
+CXXFLAGS = -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2
+LDFLAGS = $(shell pkg-config --libs sdl3)
+
+TARGET   = FunkinEverywhere
+SRC_DIR  := source
+BUILD_DIR:= export
+EXE_DIR:= bin
+
+C_SRCS   := $(shell find $(SRC_DIR) -name "*.c")
+CPP_SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
+
+C_OBJS   := $(patsubst %.c, $(BUILD_DIR)/%.o, $(C_SRCS))
+CPP_OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(CPP_SRCS))
+ALL_OBJS := $(C_OBJS) $(CPP_OBJS)
+
+DEPS     := $(ALL_OBJS:.o=.d)
+
+all: $(TARGET)
+
+$(TARGET): $(ALL_OBJS)
+	@$(LINKER) $(CXX) $(ALL_OBJS) $(LDFLAGS) -o $@
+
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+
+$(BUILD_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+
+-include $(DEPS)
+
+.PHONY: all clean
+
+clean:
+	rm -f $(OBJS) $(TARGET)
