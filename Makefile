@@ -5,11 +5,11 @@ CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2
 LDFLAGS  := -static $(shell pkg-config --static --libs sdl3)
 RC       := windres
 
-TARGET  = FunkinEverywhere
 SRC_DIR := source
 RC_DIR := art/windows
 BUILD_DIR := export
-EXE_DIR := bin
+EXE_NAME  = FunkinEverywhere
+TARGET  = $(BUILD_DIR)/$(EXE_NAME)
 
 C_SRCS   := $(shell find $(SRC_DIR) -name "*.c")
 CPP_SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
