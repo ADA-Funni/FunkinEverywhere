@@ -1,4 +1,3 @@
-
 PLATFORM ?= windows
 
 ifeq ($(PLATFORM),windows)

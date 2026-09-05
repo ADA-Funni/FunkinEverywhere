@@ -1,8 +1,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
+#include "assets/sdl3/basesprite.hpp"
 #include "rendering/sdl3/window.hpp"
-#include "window.hpp"
 
 WindowFE *globalWindow = nullptr;
 
@@ -12,17 +12,20 @@ int windowHeight = 720;
 int main(int argc, char **argv) 
 {
     globalWindow = new WindowSDL3();
-    if (!globalWindow -> init(windowWidth, windowHeight, "Funkin' Everywhere!")) 
+    if (!globalWindow -> init(windowWidth, windowHeight, "Funkin' Everywhere")) 
     {
         delete globalWindow;
         globalWindow = nullptr;
         return 1;
     }
 
+    BaseSprite testSpr = new SDL3Sprite();
+
     while(!globalWindow -> shouldClose())
     {
         globalWindow -> pollEvents();
         globalWindow -> beginFrame(0, 0, 0, 0);
+        globalWindow -> renderSprites();
         globalWindow -> endFrame(true);
     }
 

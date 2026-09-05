@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "window.hpp"
+#include "../../assets/sdl3/basesprite.hpp"
 
 bool WindowSDL3::init(int width, int height, const std::string &title)
 {
@@ -92,11 +93,15 @@ void WindowSDL3::beginFrame(int screen, int colorR, int colorG, int colorB)
 
     SDL_SetRenderDrawColor(renderer, colorR, colorG, colorB, 255);
     SDL_RenderClear(renderer);
+
+    hasFrameBegan = true;
 }
 
 void WindowSDL3::endFrame(bool shouldFlush)
 {
     SDL_RenderPresent(renderer);
+
+    hasFrameBegan = false;
 }
 
 void WindowSDL3::swapBuffers()

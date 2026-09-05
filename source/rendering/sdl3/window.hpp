@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <string>
-#include "../../window.hpp" //why cant c++ figure out what paths are
+#include "../window.hpp"
 
 class WindowSDL3 : public WindowFE 
 {

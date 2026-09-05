@@ -1,8 +1,8 @@
 CC       := gcc
 CFLAGS   := -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
 CXX      := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
-LDFLAGS  := $(shell pkg-config --libs sdl3)
+CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3 nlohmann_json pugixml) -O2 -Iinclude
+LDFLAGS  := $(shell pkg-config --libs sdl3 nlohmann_json pugixml)
 
 SRC_DIR := source
 BUILD_DIR := export
