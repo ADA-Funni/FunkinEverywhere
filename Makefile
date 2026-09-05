@@ -1,47 +1,10 @@
-CC       := gcc
-CFLAGS   := -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
-CXX      := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
-LDFLAGS  := -static $(shell pkg-config --static --libs sdl3)
-RC       := windres
 
-SRC_DIR := source
-RC_DIR := art/windows
-BUILD_DIR := export
-EXE_NAME  = FunkinEverywhere
-TARGET  = $(BUILD_DIR)/$(EXE_NAME)
+PLATFORM ?= windows
 
-C_SRCS   := $(shell find $(SRC_DIR) -name "*.c")
-CPP_SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
-RC_SRCS  := $(shell find $(RC_DIR) -name "*.rc")
-
-C_OBJS   := $(patsubst %.c, $(BUILD_DIR)/%.o, $(C_SRCS))
-CPP_OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(CPP_SRCS))
-RC_OBJS  := $(patsubst %.rc, $(BUILD_DIR)/%.o, $(RC_SRCS))
-ALL_OBJS := $(C_OBJS) $(CPP_OBJS) $(RC_OBJS)
-
-DEPS     := $(ALL_OBJS:.o=.d)
-
-all: $(TARGET)
-
-$(TARGET): $(ALL_OBJS)
-	@$(CXX) $(ALL_OBJS) $(LDFLAGS) -o $@
-
-$(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
-
-$(BUILD_DIR)/%.o: %.cpp
-	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
-
-$(BUILD_DIR)/%.o: %.rc
-	@mkdir -p $(dir $@)
-	@$(RC) $(INCLUDES) $< $@
-
--include $(DEPS)
-
-.PHONY: all clean
-
-clean:
-	rm -f $(ALL_OBJS) $(TARGET)
+ifeq ($(PLATFORM),windows)
+include make/Makefile_windows
+else ifeq ($(PLATFORM),linux)
+include make/Makefile_linux
+else
+    $(error Unknown platform: $(PLATFORM))
+endif
