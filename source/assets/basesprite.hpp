@@ -29,6 +29,14 @@ struct SpriteData
     float scaleY = 1.0f;
 };
 
+struct SpriteSubrect 
+{
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+};
+
 class BaseSprite 
 {
   protected:
@@ -43,12 +51,4 @@ class BaseSprite
     int getHeight();
 
     virtual void render(SpriteRenderParams &params) = 0;
-};
-
-struct ImageSubrect 
-{
-    int x = 0;
-    int y = 0;
-    int w = 0;
-    int h = 0;
 };
