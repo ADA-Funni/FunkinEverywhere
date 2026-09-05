@@ -1,46 +1,50 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <string>
+#include <vector>
+
 #include "../window.hpp"
+#include "../../assets/sdl3/sdl3sprite.hpp"
 
 class WindowSDL3 : public WindowFE 
 {
-  public:
-    bool debugMode;
-    bool running;
+    public:
+        bool debugMode;
+        bool running;
 
-    bool init(int width, int height, const std::string &title);
-    void cleanup();
+        bool init(int width, int height, const std::string &title);
+        void cleanup();
 
-    bool shouldClose();
-    void pollEvents();
-    void swapBuffers();
-    void resize(int width, int height);
+        bool shouldClose();
+        void pollEvents();
+        void swapBuffers();
+        void resize(int width, int height);
 
-    int getWidth() const;
-    int getHeight() const;
-    float getPixelDensity() const;
-    void *getHandle();
-    
-    float renderScale;
-    bool hasFrameBegan;
+        int getWidth() const;
+        int getHeight() const;
+        float getPixelDensity() const;
+        void *getHandle();
+        
+        float renderScale;
+        bool hasFrameBegan;
 
-    bool checkFramerate();
+        bool checkFramerate();
 
-    void setRenderScale();
-    void renderSprites();
+        void setRenderScale();
+        void renderSprites();
 
-    void *getRenderer();
+        void* getRenderer() override;
 
-    void beginFrame(int screen, int colorR, int colorG, int colorB);
-    void endFrame(bool shouldFlush = true);
+        void beginFrame(int screen, int colorR, int colorG, int colorB);
+        void endFrame(bool shouldFlush = true);
+        
+        SDL_Window *window = nullptr;
+        SDL_Renderer *renderer = nullptr;
+        SDL_GLContext context = nullptr;
 
-  private:
-    SDL_Window *window = nullptr;
-    SDL_Renderer *renderer = nullptr;
-    SDL_GLContext context = nullptr;
-    int width = 0;
-    int height = 0;
-    float pixelDensity = 1.0f;
-    bool shouldCloseFlag = false;
+    private:
+        int width = 0;
+        int height = 0;
+        float pixelDensity = 1.0f;
+        bool shouldCloseFlag = false;
 };

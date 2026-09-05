@@ -20,9 +20,9 @@ bool WindowSDL3::init(int width, int height, const std::string &title)
         return false;
     }
 
-    this->width = width;
-    this->height = height;
-    this->pixelDensity = SDL_GetWindowPixelDensity(window);
+    this -> width = width;
+    this -> height = height;
+    this -> pixelDensity = SDL_GetWindowPixelDensity(window);
 
     return true;
 }
@@ -61,9 +61,9 @@ void WindowSDL3::pollEvents()
 
 void WindowSDL3::resize(int width, int height)
 {
-    this->width = width;
-    this->height = height;
-    this->pixelDensity = SDL_GetWindowPixelDensity(window);
+    this -> width = width;
+    this -> height = height;
+    this -> pixelDensity = SDL_GetWindowPixelDensity(window);
 }
 
 int WindowSDL3::getWidth() const
@@ -123,7 +123,7 @@ void WindowSDL3::renderSprites()
     return;
 }
 
-void *WindowSDL3::getRenderer()
+void* WindowSDL3::getRenderer()
 {
     return renderer;
 }
