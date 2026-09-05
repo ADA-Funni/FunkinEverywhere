@@ -1,7 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
-#include "assets/sdl3/basesprite.hpp"
 #include "rendering/sdl3/window.hpp"
 
 WindowFE *globalWindow = nullptr;
@@ -18,8 +17,6 @@ int main(int argc, char **argv)
         globalWindow = nullptr;
         return 1;
     }
-
-    BaseSprite testSpr = new SDL3Sprite();
 
     while(!globalWindow -> shouldClose())
     {

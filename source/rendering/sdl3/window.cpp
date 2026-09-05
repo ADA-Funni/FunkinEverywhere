@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "window.hpp"
-#include "../../assets/sdl3/basesprite.hpp"
 
 bool WindowSDL3::init(int width, int height, const std::string &title)
 {
