@@ -1,7 +1,7 @@
 CC       := gcc
-CFLAGS   := -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2
+CFLAGS   := -Wall -Wextra -std=c99 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
 CXX      := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2
+CXXFLAGS := -Wall -Wextra -std=c++17 $(shell pkg-config --cflags sdl3) -O2 -Iinclude
 LDFLAGS  := -static $(shell pkg-config --static --libs sdl3)
 RC       := windres
 
@@ -25,7 +25,7 @@ DEPS     := $(ALL_OBJS:.o=.d)
 all: $(TARGET)
 
 $(TARGET): $(ALL_OBJS)
-	@$(LINKER) $(CXX) $(ALL_OBJS) $(LDFLAGS) -o $@
+	@$(CXX) $(ALL_OBJS) $(LDFLAGS) -o $@
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)

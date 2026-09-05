@@ -1,44 +1,31 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include <iostream>
+
+#include "rendering/sdl3/window.hpp"
+#include "window.hpp"
+
+WindowFE *globalWindow = nullptr;
+
+int windowWidth = 1280;
+int windowHeight = 720;
 
 int main(int argc, char **argv) 
 {
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
-
-    SDL_Window* window = nullptr;
-    SDL_Renderer* renderer = nullptr;
-    
-    if (!SDL_CreateWindowAndRenderer("Funkin' Everywhere!", 1280, 720, 0, &window, &renderer)) {
-        std::cerr << "Window/Renderer Creation Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
-
-    bool running = true;
-    SDL_Event event;
-
-    while (running)
+    globalWindow = new WindowSDL3();
+    if (!globalWindow -> init(windowWidth, windowHeight, "Funkin' Everywhere!")) 
     {
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                running = false;
-            }
-        }
-
-        SDL_SetRenderDrawColor(renderer, 20, 40, 80, 255);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
+        delete globalWindow;
+        globalWindow = nullptr;
+        return 1;
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    while(!globalWindow -> shouldClose())
+    {
+        globalWindow -> pollEvents();
+        globalWindow -> beginFrame(0, 0, 0, 0);
+        globalWindow -> endFrame(true);
+    }
 
+    globalWindow -> cleanup();
     return 0;
 }
