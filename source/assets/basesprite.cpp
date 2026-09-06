@@ -56,7 +56,7 @@ void BaseSprite::loadAtlas(const std::string& path)
         }
         else
         {
-            it->frames.push_back(frame);
+            it -> frames.push_back(frame);
         }
     }
 
