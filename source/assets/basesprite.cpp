@@ -5,10 +5,16 @@ BaseSprite::~BaseSprite()
     
 }
 
-void BaseSprite::render(SpriteRenderParams &params) 
+void BaseSprite::render() 
 {
     
 }
 
-int BaseSprite::getWidth() { return sprData.width; }
-int BaseSprite::getHeight() { return sprData.height; }
+float BaseSprite::getWidth()
+{
+    return drect.w;
+}
+float BaseSprite::getHeight()
+{
+    return drect.h;
+}

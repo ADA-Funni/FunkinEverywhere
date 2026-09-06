@@ -21,14 +21,14 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    testSpr = new SDL3Sprite("logoBumpin.png", "none");
-    SpriteRenderParams testParams{};
+    testSpr = new SDL3Sprite("assets/ui/title/logo-bumpin.png", "none");
+    testSpr -> stuff.x = 0;
 
     while(!globalWindow -> shouldClose())
     {
         globalWindow -> pollEvents();
         globalWindow -> beginFrame(0, 0, 0, 0);
-        testSpr -> render(testParams);
+        testSpr -> render();
         globalWindow -> endFrame(true);
     }
 

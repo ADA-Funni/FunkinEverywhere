@@ -12,7 +12,7 @@ class SDL3Sprite : public BaseSprite
         ~SDL3Sprite() override;
 
         void init(std::string path, std::string type = "none") override;
-        void render(SpriteRenderParams &params) override;
+        void render() override;
     private:
         SDL_Texture *texture;
 };

@@ -1,3 +1,4 @@
+#include <pugixml.hpp>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <string>
@@ -7,33 +8,51 @@
 
 void SDL3Sprite::init(std::string path, std::string type)
 {
-	this -> texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), path.c_str());
+	texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), path.c_str());
 	SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 }
 
 SDL3Sprite::SDL3Sprite(std::string path, std::string type)
 {
 	init(path, type);
+	spriteType = type;
 }
 
-void SDL3Sprite::render(SpriteRenderParams &params)
+void SDL3Sprite::render()
 {
 	float texWidth, texHeight;
 	SDL_GetTextureSize(texture, &texWidth, &texHeight);
 
-	params.srect.w = 500;
-	params.srect.h = 500;
+	stuff.width = texWidth;
+	stuff.height = texHeight;
 
-	params.drect.w = 500 * params.scaleX;
-	params.drect.h = 500 * params.scaleY;
+	if(spriteType == "sparrow")
+	{
 
-	SDL_FRect drect = {params.drect.x, params.drect.y, params.drect.w, params.drect.h};
-	SDL_FRect srect = {params.srect.x, params.srect.y, params.srect.w, params.srect.h};
+	}
+	else
+	{
+		frameWidth = texWidth;
+		frameHeight = texHeight;
+	}
 
-	SDL_RenderTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, &srect, &drect);
+	srect.x = frameX;
+	srect.y = frameY;
+	srect.w = frameWidth;
+	srect.h = frameHeight;
+
+	drect.x = stuff.x;
+	drect.y = stuff.y;
+	drect.w = stuff.width * stuff.scaleX;
+	drect.h = stuff.height * stuff.scaleY;
+
+	SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
+	SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};
+
+	SDL_RenderTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, &fsrect, &fdrect);
 }
 
 SDL3Sprite::~SDL3Sprite()
 {
-
+	SDL_DestroyTexture(texture);
 }

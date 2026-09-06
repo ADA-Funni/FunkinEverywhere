@@ -15,8 +15,12 @@ class SpriteRenderParams
     public:
         float x = 0.0f;
         float y = 0.0f;
+        float width = 0.0f;
+        float height = 0.0f;
+
         float scaleX = 1.0f;
         float scaleY = 1.0f;
+
         float alpha = 1.0f;
         float angle = 0.0f;
         float originX = 0.0f;
@@ -24,35 +28,29 @@ class SpriteRenderParams
         bool flipX = false;
         bool flipY = false;
         std::string blend = "none";
-
-        SpriteRect drect;
-        SpriteRect srect;
-};
-
-struct SpriteData 
-{
-    public:
-		int width = 0;
-		int height = 0;
-		std::string format = "none";
-		int pitch = 0;
-		void *pixels = nullptr;
-		float scaleX = 1.0f;
-		float scaleY = 1.0f;
 };
 
 class BaseSprite 
 {
     protected:
-        SpriteData sprData;
+		SpriteRect drect;
+		SpriteRect srect;
 
     public:
         BaseSprite() = default;
-        virtual void init(std::string path, std::string type = "none");
+        virtual void init(std::string path, std::string type = "none") = 0;
         virtual ~BaseSprite();
 
-        int getWidth();
-        int getHeight();
+		SpriteRenderParams stuff;
+        std::string spriteType;
+		
+        float frameX = 0.0f;
+        float frameY = 0.0f;
+        float frameWidth = 0.0f;
+        float frameHeight = 0.0f;
 
-        virtual void render(SpriteRenderParams &params);
+        float getWidth();
+        float getHeight();
+
+        virtual void render();
 };
