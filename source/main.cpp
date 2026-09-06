@@ -1,14 +1,11 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
-#include "assets/funkinsprite.hpp"
 #include "assets/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
-
 #include "funkin/states/titlestate.hpp"
 
 WindowFE *globalWindow = nullptr;
-SpriteManager sprites;
 StateManager states;
 
 int windowWidth = 1280;

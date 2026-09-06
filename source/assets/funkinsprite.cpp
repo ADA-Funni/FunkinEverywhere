@@ -17,6 +17,16 @@ void FunkinSprite::render()
     sprite -> render();
 }
 
+void FunkinSprite::addAnim(const std::string& name, const std::string& prefix, float fps, bool looped, bool flipX, bool flipY)
+{
+    sprite -> addAnim(name, prefix, fps, looped, flipX, flipY);
+}
+
+void FunkinSprite::addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY)
+{
+    sprite -> addAnim(name, prefix, indices, fps, looped, flipX, flipY);
+}
+
 void FunkinSprite::playAnim(const std::string& name)
 {
     sprite -> playAnim(name);

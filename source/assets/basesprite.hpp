@@ -99,8 +99,8 @@ class BaseSprite
 
         void addAnimFrames(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY);
 
-        void addAnim(const std::string& name, const std::string& prefix, float fps, bool looped, bool flipX, bool flipY);
-        void addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY);
+        void addAnim(const std::string& name, const std::string& prefix, float fps = 24.0f, bool looped = false, bool flipX = false, bool flipY = false);
+        void addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps = 24.0f, bool looped = false, bool flipX = false, bool flipY = false);
 
         void playAnim(const std::string& name);
         

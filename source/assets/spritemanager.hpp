@@ -1,14 +1,12 @@
 #pragma once
 #include <vector>
 
-#include "funkinsprite.hpp"
-
 class FunkinSprite;
 
 class SpriteManager
 {
     private:
-        std::vector<FunkinSprite*> sprites;
+        std::vector<FunkinSprite*> dasprites;
 
     public:
         void add(FunkinSprite* sprite);
@@ -18,3 +16,5 @@ class SpriteManager
         void update(float elapsed);
         void render();
 };
+
+extern SpriteManager sprites;

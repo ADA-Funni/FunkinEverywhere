@@ -3,25 +3,27 @@
 #include "spritemanager.hpp"
 #include "funkinsprite.hpp"
 
+SpriteManager sprites;
+
 void SpriteManager::add(FunkinSprite* sprite)
 {
-    sprites.push_back(sprite);
+    dasprites.push_back(sprite);
 }
 
 void SpriteManager::remove(FunkinSprite* sprite)
 {
-    sprites.erase(std::remove(sprites.begin(), sprites.end(), sprite), sprites.end());
+    dasprites.erase(std::remove(dasprites.begin(), dasprites.end(), sprite), dasprites.end());
 }
 
 void SpriteManager::clear()
 {
-    for (FunkinSprite* sprite : sprites)delete sprite;
-    sprites.clear();
+    for (FunkinSprite* sprite : dasprites)delete sprite;
+    dasprites.clear();
 }
 
 void SpriteManager::update(float elapsed)
 {
-    for (FunkinSprite* sprite : sprites)
+    for (FunkinSprite* sprite : dasprites)
     {
         sprite -> update(elapsed);
     }
@@ -29,7 +31,7 @@ void SpriteManager::update(float elapsed)
 
 void SpriteManager::render()
 {
-    for (FunkinSprite* sprite : sprites)
+    for (FunkinSprite* sprite : dasprites)
     {
         sprite -> render();
     }

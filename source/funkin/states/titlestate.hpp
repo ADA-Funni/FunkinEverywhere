@@ -1,4 +1,5 @@
 #include "basestate.hpp"
+#include "../../assets/funkinsprite.hpp"
 
 class TitleState : public BaseState 
 {
@@ -9,4 +10,9 @@ class TitleState : public BaseState
 
     TitleState();
     ~TitleState();
+
+    FunkinSprite* logoBl;
+    FunkinSprite* gfDance;
+    
+    void startIntro();
 };
