@@ -12,9 +12,9 @@ class WindowSDL3 : public WindowFE
         bool debugMode;
         bool running;
 
-        bool init(int width, int height, const std::string &title);
+        bool create(int width, int height, const std::string &title);
         float calcElapsed();
-        void cleanup();
+        void destroy();
 
         bool shouldClose();
         void pollEvents();

@@ -9,9 +9,9 @@ class WindowFE
         bool debugMode = false;
         bool running = true;
 
-        virtual bool init(int width, int height, const std::string &title) = 0;
+        virtual bool create(int width, int height, const std::string &title) = 0;
         virtual float calcElapsed() = 0;
-        virtual void cleanup() = 0;
+        virtual void destroy() = 0;
 
         virtual bool shouldClose() = 0;
         virtual void pollEvents() = 0;

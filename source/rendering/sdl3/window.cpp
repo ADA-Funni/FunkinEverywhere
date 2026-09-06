@@ -3,7 +3,7 @@
 
 #include "window.hpp"
 
-bool WindowSDL3::init(int width, int height, const std::string &title)
+bool WindowSDL3::create(int width, int height, const std::string &title)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
@@ -38,7 +38,7 @@ float WindowSDL3::calcElapsed()
     return elapsed;
 }
 
-void WindowSDL3::cleanup()
+void WindowSDL3::destroy()
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -72,7 +72,7 @@ class BaseSprite
 
     public:
         BaseSprite() = default;
-        virtual void init(const std::string& path, const std::string& type = "none") = 0;
+        virtual void create(const std::string& path, const std::string& type = "none") = 0;
         virtual ~BaseSprite();
 
 		SpriteRenderParams stuff;

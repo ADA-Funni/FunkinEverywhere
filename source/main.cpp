@@ -5,8 +5,11 @@
 #include "assets/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
 
+#include "funkin/states/titlestate.hpp"
+
 WindowFE *globalWindow = nullptr;
 SpriteManager sprites;
+StateManager states;
 
 int windowWidth = 1280;
 int windowHeight = 720;
@@ -14,24 +17,22 @@ int windowHeight = 720;
 int main(int argc, char **argv) 
 {
     globalWindow = new WindowSDL3();
-    if (!globalWindow -> init(windowWidth, windowHeight, "Funkin' Everywhere")) 
+    if (!globalWindow -> create(windowWidth, windowHeight, "Funkin' Everywhere")) 
     {
         delete globalWindow;
         globalWindow = nullptr;
         return 1;
     }
 
-    FunkinSprite* testSpr = new FunkinSprite("ui/title/logo-bumpin", "sparrow");
-    testSpr -> getParams().x = 0;
-    sprites.add(testSpr);
-
-    testSpr -> playAnim("logo bumpin", 24, true);
+    TitleState *initialState = new TitleState(); // replace this line if you wanna have a different initial state
+    states.changeState(initialState);
 
     while(!globalWindow -> shouldClose())
     {
         float elapsed = globalWindow -> calcElapsed();
 
         sprites.update(elapsed);
+        states.update(elapsed);
         globalWindow -> pollEvents();
         globalWindow -> beginFrame(0, 0, 0, 0);
         sprites.render();
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
     }
 
     sprites.clear();
-    globalWindow -> cleanup();
+    globalWindow -> destroy();
 
     return 0;
 }

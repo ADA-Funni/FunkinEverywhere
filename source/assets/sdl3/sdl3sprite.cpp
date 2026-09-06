@@ -7,7 +7,7 @@
 #include "sdl3sprite.hpp"
 #include "../../util/coolutil.hpp"
 
-void SDL3Sprite::init(const std::string& path, const std::string& type)
+void SDL3Sprite::create(const std::string& path, const std::string& type)
 {
     auto mods = listDirectory("mods");
     modName = (mods && !mods -> empty()) ? (*mods)[0] : "none";
@@ -24,7 +24,7 @@ void SDL3Sprite::init(const std::string& path, const std::string& type)
 
 SDL3Sprite::SDL3Sprite(const std::string& path, const std::string& type)
 {
-	init(path, type);
+	create(path, type);
 	spriteType = type;
 }
 
