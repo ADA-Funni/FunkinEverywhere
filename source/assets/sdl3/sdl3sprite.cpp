@@ -1,18 +1,23 @@
-#include <pugixml.hpp>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <string>
+#include <iostream>
 
 #include "../../rendering/sdl3/window.hpp"
 #include "sdl3sprite.hpp"
 
-void SDL3Sprite::init(std::string path, std::string type)
+void SDL3Sprite::init(const std::string& path, const std::string& type)
 {
-	texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), path.c_str());
+	if(type != "animateatlas" && type != "multianimate") 
+	{
+		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), ("assets/" + path + ".png").c_str());
+		if (type == "sparrow") loadAtlas("assets/" + path + ".xml");
+	}
+
 	SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 }
 
-SDL3Sprite::SDL3Sprite(std::string path, std::string type)
+SDL3Sprite::SDL3Sprite(const std::string& path, const std::string& type)
 {
 	init(path, type);
 	spriteType = type;
@@ -20,36 +25,53 @@ SDL3Sprite::SDL3Sprite(std::string path, std::string type)
 
 void SDL3Sprite::render()
 {
-	float texWidth, texHeight;
-	SDL_GetTextureSize(texture, &texWidth, &texHeight);
+    if (!texture) return;
 
-	stuff.width = texWidth;
-	stuff.height = texHeight;
+    float texWidth, texHeight;
+    SDL_GetTextureSize(texture, &texWidth, &texHeight);
 
-	if(spriteType == "sparrow")
-	{
+    if (spriteType == "sparrow")
+    {
+        AtlasFrame& frame = anims[curAnim].frames[curFrame];
 
-	}
-	else
-	{
-		frameWidth = texWidth;
-		frameHeight = texHeight;
-	}
+        srect.x = frame.x;
+        srect.y = frame.y;
+        srect.w = frame.width;
+        srect.h = frame.height;
 
-	srect.x = frameX;
-	srect.y = frameY;
-	srect.w = frameWidth;
-	srect.h = frameHeight;
+        frameX = frame.frameX;
+        frameY = frame.frameY;
+        frameWidth = frame.frameWidth;
+        frameHeight = frame.frameHeight;
 
-	drect.x = stuff.x;
-	drect.y = stuff.y;
-	drect.w = stuff.width * stuff.scaleX;
-	drect.h = stuff.height * stuff.scaleY;
+        stuff.width = frameWidth;
+        stuff.height = frameHeight;
+    }
+    else
+    {
+        srect.x = 0;
+        srect.y = 0;
+        srect.w = texWidth;
+        srect.h = texHeight;
 
-	SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
-	SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};
+        frameX = 0;
+        frameY = 0;
+        frameWidth = texWidth;
+        frameHeight = texHeight;
 
-	SDL_RenderTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, &fsrect, &fdrect);
+        stuff.width = texWidth;
+        stuff.height = texHeight;
+    }
+
+    drect.x = stuff.x + frameX * stuff.scaleX;
+    drect.y = stuff.y + frameY * stuff.scaleY;
+    drect.w = stuff.width * stuff.scaleX;
+    drect.h = stuff.height * stuff.scaleY;
+
+    SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
+    SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};
+
+    SDL_RenderTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, &fsrect, &fdrect);
 }
 
 SDL3Sprite::~SDL3Sprite()

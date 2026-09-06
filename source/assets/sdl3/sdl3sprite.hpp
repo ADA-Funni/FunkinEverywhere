@@ -8,10 +8,10 @@
 class SDL3Sprite : public BaseSprite 
 {
     public:
-        SDL3Sprite(std::string path, std::string type);
+        SDL3Sprite(const std::string& path, const std::string& type = "none");
         ~SDL3Sprite() override;
 
-        void init(std::string path, std::string type = "none") override;
+        void init(const std::string& path, const std::string& type) override;
         void render() override;
     private:
         SDL_Texture *texture;

@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    testSpr = new SDL3Sprite("assets/ui/title/logo-bumpin.png", "none");
+    testSpr = new SDL3Sprite("ui/title/logo-bumpin", "sparrow");
     testSpr -> stuff.x = 0;
 
     while(!globalWindow -> shouldClose())
