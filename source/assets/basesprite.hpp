@@ -93,4 +93,6 @@ class BaseSprite
         void loadAtlas(const std::string& path);
 
         void playAnim(const std::string& name, float fps = 24.0f, bool loop = true);
+        
+        std::string modName;
 };

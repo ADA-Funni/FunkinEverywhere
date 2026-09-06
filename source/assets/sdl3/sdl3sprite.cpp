@@ -5,13 +5,18 @@
 
 #include "../../rendering/sdl3/window.hpp"
 #include "sdl3sprite.hpp"
+#include "../../util/coolutil.hpp"
 
 void SDL3Sprite::init(const std::string& path, const std::string& type)
 {
+    auto mods = listDirectory("mods");
+    modName = (mods && !mods->empty()) ? (*mods)[0] : "none";
+    std::string assetPath = fileExists("mods/" + modName + "/" + path + ".png") ? "mods/" + modName + "/" : "assets/";
+
 	if(type != "animateatlas" && type != "multianimate") 
 	{
-		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), ("assets/" + path + ".png").c_str());
-		if (type == "sparrow") loadAtlas("assets/" + path + ".xml");
+		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), (assetPath + path + ".png").c_str());
+		if (type == "sparrow") loadAtlas(assetPath + path + ".xml");
 	}
 
 	SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
