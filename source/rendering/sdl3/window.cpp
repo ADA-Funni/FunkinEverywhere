@@ -1,5 +1,4 @@
 #include <SDL3/SDL.h>
-
 #include <iostream>
 
 #include "window.hpp"
@@ -24,6 +23,8 @@ bool WindowSDL3::init(int width, int height, const std::string &title)
     this -> height = height;
     this -> pixelDensity = SDL_GetWindowPixelDensity(window);
 
+    SDL_SetRenderLogicalPresentation(renderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
     return true;
 }
 
@@ -37,26 +38,6 @@ void WindowSDL3::cleanup()
 bool WindowSDL3::shouldClose()
 {
     return shouldCloseFlag;
-}
-
-void WindowSDL3::pollEvents()
-{
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) 
-        {
-            case SDL_EVENT_QUIT:
-            {
-                shouldCloseFlag = true;
-            } break;
-            case SDL_EVENT_WINDOW_RESIZED: 
-            {
-                int w, h;
-                SDL_GetWindowSizeInPixels(window, &w, &h);
-                resize(w, h);
-            } break;
-        }
-    }
 }
 
 void WindowSDL3::resize(int width, int height)
@@ -126,4 +107,24 @@ void WindowSDL3::renderSprites()
 void* WindowSDL3::getRenderer()
 {
     return renderer;
+}
+
+void WindowSDL3::pollEvents()
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) 
+        {
+            case SDL_EVENT_QUIT:
+            {
+                shouldCloseFlag = true;
+            } break;
+            case SDL_EVENT_WINDOW_RESIZED: 
+            {
+                int w, h;
+                SDL_GetWindowSizeInPixels(window, &w, &h);
+                this -> resize(w, h);
+            } break;
+        }
+    }
 }
