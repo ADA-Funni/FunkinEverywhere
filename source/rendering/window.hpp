@@ -10,6 +10,7 @@ class WindowFE
         bool running = true;
 
         virtual bool init(int width, int height, const std::string &title) = 0;
+        virtual float calcElapsed() = 0;
         virtual void cleanup() = 0;
 
         virtual bool shouldClose() = 0;

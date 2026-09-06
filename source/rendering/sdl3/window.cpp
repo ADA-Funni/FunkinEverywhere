@@ -29,6 +29,15 @@ bool WindowSDL3::init(int width, int height, const std::string &title)
     return true;
 }
 
+float WindowSDL3::calcElapsed()
+{
+    Uint64 currentTime = SDL_GetTicks();
+    float elapsed = (currentTime - lastTime) / 1000.0f;
+    lastTime = currentTime;
+
+    return elapsed;
+}
+
 void WindowSDL3::cleanup()
 {
     SDL_DestroyRenderer(renderer);

@@ -64,6 +64,12 @@ class BaseSprite
         int curAnim = 0;
         int curFrame = 0;
 
+        float animTimer = 0.0f;
+        bool animPlaying = false;
+
+        float animFPS = 24.0f;
+        bool animLoop = true;
+
     public:
         BaseSprite() = default;
         virtual void init(const std::string& path, const std::string& type = "none") = 0;
@@ -80,8 +86,11 @@ class BaseSprite
         float getWidth();
         float getHeight();
 
+        void update(float elapsed);
         virtual void render();
 
         std::string getAnimName(const std::string& frameName, int& frameIndex);
         void loadAtlas(const std::string& path);
+
+        void playAnim(const std::string& name, float fps = 24.0f, bool loop = true);
 };

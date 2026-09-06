@@ -13,6 +13,7 @@ class WindowSDL3 : public WindowFE
         bool running;
 
         bool init(int width, int height, const std::string &title);
+        float calcElapsed();
         void cleanup();
 
         bool shouldClose();
@@ -47,4 +48,6 @@ class WindowSDL3 : public WindowFE
         int height = 0;
         float pixelDensity = 1.0f;
         bool shouldCloseFlag = false;
+        
+        Uint64 lastTime = SDL_GetTicks();
 };

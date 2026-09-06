@@ -56,17 +56,14 @@ void SDL3Sprite::render()
 
         frameX = 0;
         frameY = 0;
-        frameWidth = texWidth;
-        frameHeight = texHeight;
-
-        stuff.width = texWidth;
-        stuff.height = texHeight;
+        stuff.width = frameWidth = texWidth;
+        stuff.height = frameHeight = texHeight;
     }
 
-    drect.x = stuff.x + frameX * stuff.scaleX;
-    drect.y = stuff.y + frameY * stuff.scaleY;
-    drect.w = stuff.width * stuff.scaleX;
-    drect.h = stuff.height * stuff.scaleY;
+    drect.x = (stuff.x - frameX) * stuff.scaleX;
+    drect.y = (stuff.y - frameY) * stuff.scaleY;
+    drect.w = srect.w * stuff.scaleX;
+    drect.h = srect.h * stuff.scaleY;
 
     SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
     SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};

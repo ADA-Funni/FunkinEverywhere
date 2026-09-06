@@ -72,6 +72,57 @@ void BaseSprite::loadAtlas(const std::string& path)
     }
 }
 
+void BaseSprite::playAnim(const std::string& name, float fps, bool loop)
+{
+    for (int i = 0; i < static_cast<int>(anims.size()); i++)
+    {
+        if (anims[i].name == name)
+        {
+            curAnim = i;
+            curFrame = 0;
+
+            animTimer = 0.0f;
+            animFPS = fps;
+            animLoop = loop;
+            animPlaying = true;
+
+            return;
+        }
+    }
+}
+
+void BaseSprite::update(float elapsed)
+{
+    if (!animPlaying) return;
+    if (curAnim < 0 || curAnim >= static_cast<int>(anims.size())) return;
+
+    Animation& anim = anims[curAnim];
+    if (anim.frames.empty()) return;
+
+    animTimer += elapsed;
+    float frameTime = 1.0f / animFPS;
+
+    while (animTimer >= frameTime)
+    {
+        animTimer -= frameTime;
+        curFrame += 1;
+
+        if (curFrame >= static_cast<int>(anim.frames.size()))
+        {
+            if (animLoop)
+            {
+                curFrame = 0;
+            }
+            else
+            {
+                curFrame = anim.frames.size() - 1;
+                animPlaying = false;
+                break;
+            }
+        }
+    }
+}
+
 BaseSprite::~BaseSprite() 
 {
     
