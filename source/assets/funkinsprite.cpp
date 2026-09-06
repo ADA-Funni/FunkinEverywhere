@@ -17,9 +17,9 @@ void FunkinSprite::render()
     sprite -> render();
 }
 
-void FunkinSprite::playAnim(const std::string& name, float fps, bool loop)
+void FunkinSprite::playAnim(const std::string& name)
 {
-    sprite -> playAnim(name, fps, loop);
+    sprite -> playAnim(name);
 }
 
 SpriteRenderParams& FunkinSprite::getParams()

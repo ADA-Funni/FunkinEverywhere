@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <cctype>
 #include <pugixml.hpp>
 
 #include "basesprite.hpp"
@@ -72,7 +73,64 @@ void BaseSprite::loadAtlas(const std::string& path)
     }
 }
 
-void BaseSprite::playAnim(const std::string& name, float fps, bool loop)
+void BaseSprite::addAnimFrames(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY)
+{
+    auto it = std::find_if(anims.begin(), anims.end(), [&](const Animation& anim) {return anim.name == prefix;});
+
+    if (it == anims.end())
+        return;
+
+    Animation anim;
+
+    anim.name = name;
+    anim.frames.clear();
+
+    for (int index : indices)
+    {
+        auto frameIt = std::find_if(
+            it->frames.begin(),
+            it->frames.end(),
+            [&](const AtlasFrame& frame)
+            {
+                return frame.index == index;
+            }
+        );
+
+        if (frameIt != it -> frames.end()) anim.frames.push_back(*frameIt);
+    }
+
+    anim.fps = fps;
+    anim.looped = looped;
+    anim.flipX = flipX;
+    anim.flipY = flipY;
+
+    anims.push_back(anim);
+}
+
+void BaseSprite::addAnim(const std::string& name, const std::string& prefix, float fps, bool looped, bool flipX, bool flipY)
+{
+    auto it = std::find_if(anims.begin(), anims.end(), [&](const Animation& anim) {return anim.name == prefix;});
+
+    if (it == anims.end()) return;
+
+    Animation anim = *it;
+
+    anim.name = name;
+    anim.fps = fps;
+    anim.looped = looped;
+    anim.flipX = flipX;
+    anim.flipY = flipY;
+
+    anims.push_back(anim);
+}
+
+void BaseSprite::addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY)
+{
+    addAnimFrames(name, prefix, indices, fps, looped, flipX, flipY);
+}
+
+
+void BaseSprite::playAnim(const std::string& name)
 {
     for (int i = 0; i < static_cast<int>(anims.size()); i++)
     {
@@ -82,8 +140,8 @@ void BaseSprite::playAnim(const std::string& name, float fps, bool loop)
             curFrame = 0;
 
             animTimer = 0.0f;
-            animFPS = fps;
-            animLoop = loop;
+            animFPS = anims[i].fps;
+            animLoop = anims[i].looped;
             animPlaying = true;
 
             return;

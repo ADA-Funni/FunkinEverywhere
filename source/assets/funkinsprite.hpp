@@ -17,7 +17,7 @@ class FunkinSprite
         void update(float elapsed);
         void render();
 
-        void playAnim(const std::string& name, float fps = 24.0f, bool loop = true);
+        void playAnim(const std::string& name);
 
         SpriteRenderParams& getParams();
 

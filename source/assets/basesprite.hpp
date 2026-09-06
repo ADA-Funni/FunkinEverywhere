@@ -31,6 +31,11 @@ struct Animation
 {
     std::string name;
     std::vector<AtlasFrame> frames;
+
+    float fps = 24.0f;
+    bool looped = false;
+    bool flipX = false;
+    bool flipY = false;
 };
 
 class SpriteRenderParams
@@ -92,7 +97,12 @@ class BaseSprite
         std::string getAnimName(const std::string& frameName, int& frameIndex);
         void loadAtlas(const std::string& path);
 
-        void playAnim(const std::string& name, float fps = 24.0f, bool loop = true);
+        void addAnimFrames(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY);
+
+        void addAnim(const std::string& name, const std::string& prefix, float fps, bool looped, bool flipX, bool flipY);
+        void addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps, bool looped, bool flipX, bool flipY);
+
+        void playAnim(const std::string& name);
         
         std::string modName;
 };
