@@ -10,7 +10,7 @@
 void SDL3Sprite::init(const std::string& path, const std::string& type)
 {
     auto mods = listDirectory("mods");
-    modName = (mods && !mods->empty()) ? (*mods)[0] : "none";
+    modName = (mods && !mods -> empty()) ? (*mods)[0] : "none";
     std::string assetPath = fileExists("mods/" + modName + "/" + path + ".png") ? "mods/" + modName + "/" : "assets/";
 
 	if(type != "animateatlas" && type != "multianimate") 
