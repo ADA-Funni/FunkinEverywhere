@@ -21,11 +21,11 @@ void SDL3Sprite::render(SpriteRenderParams &params)
 	float texWidth, texHeight;
 	SDL_GetTextureSize(texture, &texWidth, &texHeight);
 
-	params.drect.w = texWidth;
-	params.drect.h = texHeight;
-
 	params.srect.w = 500;
 	params.srect.h = 500;
+
+	params.drect.w = 500 * params.scaleX;
+	params.drect.h = 500 * params.scaleY;
 
 	SDL_FRect drect = {params.drect.x, params.drect.y, params.drect.w, params.drect.h};
 	SDL_FRect srect = {params.srect.x, params.srect.y, params.srect.w, params.srect.h};
