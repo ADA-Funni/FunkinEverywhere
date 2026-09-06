@@ -24,6 +24,7 @@ bool WindowSDL3::init(int width, int height, const std::string &title)
     this -> pixelDensity = SDL_GetWindowPixelDensity(window);
 
     SDL_SetRenderLogicalPresentation(renderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    SDL_SetRenderVSync(renderer, 1);
 
     return true;
 }
