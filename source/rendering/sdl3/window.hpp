@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../window.hpp"
-#include "../../assets/sdl3/sdl3sprite.hpp"
+#include "../../graphics/sdl3/sdl3sprite.hpp"
 
 class WindowSDL3 : public WindowFE 
 {

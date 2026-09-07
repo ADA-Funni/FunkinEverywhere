@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
-#include "assets/spritemanager.hpp"
+#include "graphics/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
 #include "funkin/conductor.hpp"

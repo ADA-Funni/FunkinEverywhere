@@ -1,6 +1,6 @@
 #include "titlestate.hpp"
-#include "../../assets/funkinsprite.hpp"
-#include "../../assets/spritemanager.hpp"
+#include "../../graphics/funkinsprite.hpp"
+#include "../../graphics/spritemanager.hpp"
 #include "../../rendering/window.hpp"
 #include "../conductor.hpp"
 
@@ -32,8 +32,8 @@ void TitleState::startIntro()
 
 void TitleState::create()
 {
-    conductor.setBPM(102);
     startIntro();
+    conductor.setBPM(102);
     isInitialized = true;
 }
 

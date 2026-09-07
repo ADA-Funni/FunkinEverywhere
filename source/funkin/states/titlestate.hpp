@@ -1,5 +1,5 @@
 #include "basestate.hpp"
-#include "../../assets/funkinsprite.hpp"
+#include "../../graphics/funkinsprite.hpp"
 
 class TitleState : public BaseState 
 {
