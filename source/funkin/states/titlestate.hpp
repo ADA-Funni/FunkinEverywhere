@@ -3,16 +3,20 @@
 
 class TitleState : public BaseState 
 {
-  public:
-    void create() override;
-    void update(float elapsed) override;
-    void destroy() override;
+	public:
+		void create() override;
+		void update(float elapsed) override;
+		void destroy() override;
+		
+		void stepHit(int step) override;
+		void beatHit(int beat) override;
+		void measureHit(int measure) override;
 
-    TitleState();
-    ~TitleState();
+		TitleState();
+		~TitleState();
 
-    FunkinSprite* logoBl;
-    FunkinSprite* gfDance;
-    
-    void startIntro();
+		FunkinSprite* logoBl;
+		FunkinSprite* gfDance;
+		
+		void startIntro();
 };

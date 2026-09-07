@@ -24,3 +24,18 @@ void MainMenuState::destroy()
 {
 
 }
+
+void MainMenuState::stepHit(int step)
+{
+    
+}
+
+void MainMenuState::beatHit(int beat)
+{
+    
+}
+
+void MainMenuState::measureHit(int measure)
+{
+    
+}

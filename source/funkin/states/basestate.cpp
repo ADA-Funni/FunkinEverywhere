@@ -49,3 +49,18 @@ void StateManager::destroy()
         prevState = nullptr;
     }
 }
+
+void StateManager::stepHit(int step)
+{
+    if (curState && curState != nullptr) curState -> stepHit(step);
+}
+
+void StateManager::beatHit(int beat)
+{
+    if (curState && curState != nullptr) curState -> beatHit(beat);
+}
+
+void StateManager::measureHit(int measure)
+{
+    if (curState && curState != nullptr) curState -> measureHit(measure);
+}

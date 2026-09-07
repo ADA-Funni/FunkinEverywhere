@@ -4,6 +4,7 @@
 #include "assets/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
+#include "funkin/conductor.hpp"
 
 WindowFE *globalWindow = nullptr;
 StateManager states;
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
         float elapsed = globalWindow -> calcElapsed();
 
         sprites.update(elapsed);
+        conductor.updateBeats(elapsed);
         states.update(elapsed);
         globalWindow -> pollEvents();
         globalWindow -> beginFrame(0, 0, 0, 0);

@@ -2,11 +2,15 @@
 
 class MainMenuState : public BaseState 
 {
-  public:
-    void create() override;
-    void update(float elapsed) override;
-    void destroy() override;
+	public:
+		void create() override;
+		void update(float elapsed) override;
+		void destroy() override;
 
-    MainMenuState();
-    ~MainMenuState();
+		void stepHit(int step) override;
+		void beatHit(int beat) override;
+		void measureHit(int measure) override;
+
+		MainMenuState();
+		~MainMenuState();
 };
