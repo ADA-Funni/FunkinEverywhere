@@ -16,36 +16,19 @@ void SoundManager::init()
     #if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
     if (!SDL_Init(SDL_INIT_AUDIO))
     {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        std::cerr << "SDL_Init failed: " << SDL_GetError() << std::endl;
         return;
     }
 
     if (!MIX_Init())
     {
-        std::cerr << "MIX_Init Error: " << SDL_GetError() << std::endl;
+        std::cerr << "MIX_Init failed: " << SDL_GetError() << '\n';
         return;
     }
 
-    audioDevice = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-    if (!audioDevice)
-    {
-        std::cerr << "SDL_OpenAudioDevice Error: " << SDL_GetError() << std::endl;
-        return;
-    }
-
-    mixer = MIX_CreateMixerDevice(audioDevice, NULL);
-    if (!mixer)
-    {
-        std::cerr << "MIX_CreateMixerDevice Error: " << SDL_GetError() << std::endl;
-        return;
-    }
-
+    audioDevice = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+    mixer = MIX_CreateMixerDevice(audioDevice, nullptr);
     mtrack = MIX_CreateTrack(mixer);
-    if (!mtrack)
-    {
-        std::cerr << "MIX_CreateTrack Error: " << SDL_GetError() << std::endl;
-        return;
-    }
     #endif
 }
 

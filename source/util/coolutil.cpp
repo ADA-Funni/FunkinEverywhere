@@ -31,6 +31,13 @@ bool fileExists(const std::string& filename)
     return file.is_open();
 }
 
+std::string parentPath(const std::string &path)
+{
+    size_t pos = path.find_last_of("/\\");
+    if (std::string::npos != pos) return path.substr(0, pos);
+    return "";
+}
+
 nonstd::expected<std::vector<std::string>, std::string> listDirectory(const std::string &path) //stolen from scratch everywhere
 {
     std::vector<std::string> files;

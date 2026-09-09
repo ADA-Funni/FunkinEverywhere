@@ -6,6 +6,7 @@
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
 #include "funkin/conductor.hpp"
+#include "util/coolutil.hpp"
 
 WindowFE *globalWindow = nullptr;
 std::string modName;
