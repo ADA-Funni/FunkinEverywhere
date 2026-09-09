@@ -15,11 +15,6 @@ void SDL3SoundFE::create(const std::string& path, const std::string& type)
     std::string assetPath = fileExists("mods/" + modName + "/" + path + ".ogg") ? "mods/" + modName + "/" : "assets/";
 
     sound = MIX_LoadAudio(sounds.mixer, (assetPath + path + ".ogg").c_str(), false);
-    if (!sound)
-    {
-        std::cerr << "MIX_LoadAudio failed: " << SDL_GetError() << '\n';
-        return;
-    }
 
     if (type == "music")
     {
