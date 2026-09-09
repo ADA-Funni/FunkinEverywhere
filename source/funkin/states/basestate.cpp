@@ -5,6 +5,8 @@ BaseState::~BaseState() = default;
 BaseState *StateManager::curState = nullptr;
 BaseState *StateManager::prevState = nullptr;
 
+StateManager states;
+
 void StateManager::changeState(BaseState *state)
 {
     if (curState != nullptr) curState -> destroy();

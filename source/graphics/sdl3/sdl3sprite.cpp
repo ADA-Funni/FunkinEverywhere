@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "../../rendering/sdl3/window.hpp"
+#include "../../rendering/window.hpp"
 #include "sdl3sprite.hpp"
 #include "../../util/coolutil.hpp"
 

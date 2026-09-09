@@ -8,6 +8,12 @@ class BaseSound
         BaseSound() = default;
         virtual void create(const std::string& path, const std::string& type = "none") = 0;
         virtual ~BaseSound();
+        
+        std::string soundType;
 
-        void play(const std::string& name);
+        void play();
+        void playMusic();
+        void stopMusic();
+
+        void update(float elapsed);
 };

@@ -109,11 +109,6 @@ void WindowSDL3::setRenderScale()
     return;
 }
 
-void WindowSDL3::renderSprites()
-{
-    return;
-}
-
 void* WindowSDL3::getRenderer()
 {
     return renderer;

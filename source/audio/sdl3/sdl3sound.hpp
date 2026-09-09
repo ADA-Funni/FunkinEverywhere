@@ -1,19 +1,26 @@
 #pragma once
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "basesound.hpp"
+#include "../basesound.hpp"
 
-class FunkinSound
+class SDL3SoundFE : public BaseSound // SDL3Sound already exists
 {
-    friend class SoundManager;
-
     private:
-        std::unique_ptr<BaseSound> sound;
+        MIX_Audio* sound = nullptr;
+        MIX_Track* strack = nullptr;
 
     public:
-        FunkinSound(const std::string& path, const std::string& type = "none");
+        SDL3SoundFE(const std::string& path, const std::string& type = "none");
+        void create(const std::string& path, const std::string& type = "none") override;
+        ~SDL3SoundFE() override;
 
-        void play(const std::string& name);
+        void play();
+        void playMusic();
+        void stopMusic();
+
+        void update(float elapsed);
 };

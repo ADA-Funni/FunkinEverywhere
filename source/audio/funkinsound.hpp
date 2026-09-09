@@ -15,5 +15,9 @@ class FunkinSound
     public:
         FunkinSound(const std::string& path, const std::string& type = "none");
 
-        void play(const std::string& name);
+        void play();
+        void playMusic();
+        void stopMusic();
+
+        void update(float elapsed);
 };

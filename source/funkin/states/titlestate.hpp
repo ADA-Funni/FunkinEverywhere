@@ -1,4 +1,5 @@
 #include "basestate.hpp"
+#include "../../audio/funkinsound.hpp"
 #include "../../graphics/funkinsprite.hpp"
 
 class TitleState : public BaseState 
@@ -17,6 +18,8 @@ class TitleState : public BaseState
 
 		FunkinSprite* logoBl;
 		FunkinSprite* gfDance;
+		
+		FunkinSound* freakyMenu;
 		
 		void startIntro();
 };

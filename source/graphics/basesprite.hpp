@@ -103,6 +103,4 @@ class BaseSprite
         void addAnim(const std::string& name, const std::string& prefix, const std::vector<int>& indices, float fps = 24.0f, bool looped = false, bool flipX = false, bool flipY = false);
 
         void playAnim(const std::string& name);
-        
-        std::string modName;
 };

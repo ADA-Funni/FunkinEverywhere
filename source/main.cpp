@@ -1,13 +1,14 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
+#include "audio/soundmanager.hpp"
 #include "graphics/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
 #include "funkin/conductor.hpp"
 
 WindowFE *globalWindow = nullptr;
-StateManager states;
+std::string modName;
 
 int windowWidth = 1280;
 int windowHeight = 720;
@@ -21,6 +22,7 @@ int main(int argc, char **argv)
         globalWindow = nullptr;
         return 1;
     }
+    sounds.init();
 
     TitleState *initialState = new TitleState(); // replace this line if you wanna have a different initial state
     states.changeState(initialState);
@@ -30,6 +32,7 @@ int main(int argc, char **argv)
         float elapsed = globalWindow -> calcElapsed();
 
         sprites.update(elapsed);
+        sounds.update(elapsed);
         conductor.updateBeats(elapsed);
         states.update(elapsed);
         globalWindow -> pollEvents();

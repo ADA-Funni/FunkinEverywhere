@@ -30,10 +30,7 @@ class WindowSDL3 : public WindowFE
         bool hasFrameBegan;
 
         bool checkFramerate();
-
         void setRenderScale();
-        void renderSprites();
-
         void* getRenderer() override;
 
         void beginFrame(int screen, int colorR, int colorG, int colorB);

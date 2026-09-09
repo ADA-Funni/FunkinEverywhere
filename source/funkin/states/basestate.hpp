@@ -29,3 +29,5 @@ class StateManager
 		static void beatHit(int beat);
 		static void measureHit(int measure);
 };
+
+extern StateManager states;

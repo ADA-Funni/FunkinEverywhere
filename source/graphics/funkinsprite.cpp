@@ -1,10 +1,14 @@
 #include "funkinsprite.hpp"
 
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
 #include "sdl3/sdl3sprite.hpp"
+#endif
 
 FunkinSprite::FunkinSprite(const std::string& path, const std::string& type)
 {
+    #if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
     sprite = std::make_unique<SDL3Sprite>(path, type);
+    #endif
 }
 
 void FunkinSprite::update(float elapsed)

@@ -27,14 +27,12 @@ class WindowFE
         bool hasFrameBegan = false;
 
         virtual bool checkFramerate() = 0;
-
         virtual void setRenderScale() = 0;
-        virtual void renderSprites() = 0;
-
         virtual void* getRenderer() = 0;
 
         virtual void beginFrame(int screen, int colorR, int colorG, int colorB) = 0;
         virtual void endFrame(bool shouldFlush = true) = 0;
 };
 
+extern std::string modName;
 extern WindowFE *globalWindow;
