@@ -33,13 +33,13 @@ void TitleState::startIntro()
 
     freakyMenu = new FunkinSound("ui/main-menu/freaky-menu/freaky-menu", "music");
     sounds.add(freakyMenu);
+    freakyMenu -> play();
 }
 
 void TitleState::create()
 {
     startIntro();
     conductor.setBPM(102);
-    freakyMenu -> playMusic();
     isInitialized = true;
 }
 
