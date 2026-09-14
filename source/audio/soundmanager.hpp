@@ -1,9 +1,8 @@
 #pragma once
 #include <vector>
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
-#include <SDL3/SDL.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#endif
+#include <dr_mp3.h>
+#include <dr_wav.h>
+#include <stb_vorbis.c>
 
 class FunkinSound;
 
@@ -21,11 +20,13 @@ class SoundManager
 
         void update(float elapsed);
 
-        #if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
-        SDL_AudioDeviceID audioDevice;
-        MIX_Mixer* mixer;
-        MIX_Track* mtrack = nullptr;
-        #endif
+        bool loadAsWAV();
+        bool loadAsMP3();
+        bool loadAsOGG();
+
+        drwav wav;
+        drmp3 mp3;
+        stb_vorbis *ogg;
 };
 
 extern SoundManager sounds;

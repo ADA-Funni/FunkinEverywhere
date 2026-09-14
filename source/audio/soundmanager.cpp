@@ -19,16 +19,6 @@ void SoundManager::init()
         std::cerr << "SDL_Init failed: " << SDL_GetError() << std::endl;
         return;
     }
-
-    if (!MIX_Init())
-    {
-        std::cerr << "MIX_Init failed: " << SDL_GetError() << '\n';
-        return;
-    }
-
-    audioDevice = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-    mixer = MIX_CreateMixerDevice(audioDevice, nullptr);
-    mtrack = MIX_CreateTrack(mixer);
     #endif
 }
 
