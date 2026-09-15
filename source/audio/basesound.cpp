@@ -18,7 +18,17 @@ void BaseSound::play()
     
 }
 
+void BaseSound::pause()
+{
+    
+}
+
 void BaseSound::playMusic()
+{
+    
+}
+
+void BaseSound::pauseMusic()
 {
     
 }

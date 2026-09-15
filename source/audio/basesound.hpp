@@ -11,9 +11,12 @@ class BaseSound
         
         std::string soundType;
 
-        void play();
-        void playMusic();
-        void stopMusic();
+        virtual void play();
+        virtual void pause();
 
-        void update(float elapsed);
+        virtual void playMusic();
+        virtual void pauseMusic();
+        virtual void stopMusic();
+
+        virtual void update(float elapsed);
 };

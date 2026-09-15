@@ -21,9 +21,19 @@ void FunkinSound::play()
     sound -> play();
 }
 
+void FunkinSound::pause()
+{
+    sound -> pause();
+}
+
 void FunkinSound::playMusic()
 {
     sound -> playMusic();
+}
+
+void FunkinSound::pauseMusic()
+{
+    sound -> pauseMusic();
 }
 
 void FunkinSound::stopMusic()

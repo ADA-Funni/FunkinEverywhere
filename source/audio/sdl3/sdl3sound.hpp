@@ -13,14 +13,14 @@ class SDL3SoundFE : public BaseSound
         void create(const std::string& path, const std::string& type = "none") override;
         ~SDL3SoundFE() override;
 
-        void play();
-        void pause();
+        void play() override;
+        void pause() override;
 
-        void playMusic();
-        void pauseMusic();
-        void stopMusic();
+        void playMusic() override;
+        void pauseMusic() override;
+        void stopMusic() override;
 
-        void update(float elapsed);
+        void update(float elapsed) override;
     private:
         SDL_AudioStream* stream;
 };

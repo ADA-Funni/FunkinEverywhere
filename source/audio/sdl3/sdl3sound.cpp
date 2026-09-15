@@ -49,7 +49,7 @@ SDL3SoundFE::~SDL3SoundFE()
 
 void SDL3SoundFE::play()
 {
-    printf("Playing audio");
+    printf("Playing audio\n");
 
     if (stream == NULL) return;
 

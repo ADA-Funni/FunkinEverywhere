@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "basesound.hpp"
 
@@ -16,7 +15,10 @@ class FunkinSound
         FunkinSound(const std::string& path, const std::string& type = "none");
 
         void play();
+        void pause();
+
         void playMusic();
+        void pauseMusic();
         void stopMusic();
 
         void update(float elapsed);
