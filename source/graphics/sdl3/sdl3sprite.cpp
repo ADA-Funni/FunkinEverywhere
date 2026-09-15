@@ -71,10 +71,25 @@ void SDL3Sprite::render()
     drect.w = srect.w * stuff.scaleX;
     drect.h = srect.h * stuff.scaleY;
 
+    float u0 = srect.x / texWidth;
+    float v0 = srect.y / texHeight;
+
+    float u1 = (srect.x + srect.w) / texWidth;
+    float v1 = (srect.y + srect.h) / texHeight;
+
+    SDL_Vertex vertices[4] = {
+        { {drect.x + (stuff.skewX / 2), drect.y + (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v0} }, // tl
+        { {(drect.x + drect.w) + (stuff.skewX / 2), drect.y - (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v0} }, // tr
+        { {(drect.x + drect.w) - (stuff.skewX / 2), (drect.y + drect.h) - (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v1} }, // br
+        { {drect.x - (stuff.skewX / 2), (drect.y + drect.h) + (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v1} } // bl
+    };
+
+    int daindices[6] = {0, 1, 2, 2, 3, 0};
+
     SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
     SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};
 
-    SDL_RenderTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, &fsrect, &fdrect);
+    SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, vertices, 4, daindices, 6);
 }
 
 SDL3Sprite::~SDL3Sprite()

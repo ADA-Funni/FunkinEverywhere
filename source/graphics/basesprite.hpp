@@ -49,6 +49,9 @@ class SpriteRenderParams
         float scaleX = 1.0f;
         float scaleY = 1.0f;
 
+        float skewX = 0.0f;
+        float skewY = 0.0f;
+
         float alpha = 1.0f;
         float angle = 0.0f;
         float originX = 0.0f;
