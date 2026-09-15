@@ -29,10 +29,11 @@ void SDL3SoundFE::create(const std::string& path, const std::string& type)
     src_spec.channels = channels;
     src_spec.freq = sample_rate;
 
+    bytes_per_second = src_spec.freq * src_spec.channels * SDL_AUDIO_BYTESIZE(src_spec.format);
+    total_bytes_pushed = buffer_size_bytes;
+
     stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &src_spec, NULL, NULL);
     SDL_PutAudioStreamData(stream, decoded_output, buffer_size_bytes);
-
-    //free(decoded_output);
 }
 
 SDL3SoundFE::SDL3SoundFE(const std::string& path, const std::string& type)
@@ -79,5 +80,8 @@ void SDL3SoundFE::stopMusic()
 
 void SDL3SoundFE::update(float elapsed)
 {
+    int bytes_left_in_queue = SDL_GetAudioStreamAvailable(stream);
+    Uint64 bytes_played = total_bytes_pushed - bytes_left_in_queue;
 
+    sounds.current_position_seconds = (double)bytes_played / bytes_per_second;
 }

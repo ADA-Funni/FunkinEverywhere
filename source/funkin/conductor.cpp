@@ -8,10 +8,20 @@ Conductor conductor;
 
 void Conductor::setBPM(float newbpm)
 {
-    bpm = newbpm;
     swagTimer = 0.0f;
+    bpm = newbpm;
 
     if (bpm <= 10.0f) bpm = 10.0f;
+
+    curStepFloat = 0.0f;
+
+    curStep = 0;
+    curBeat = 0;
+    curMeasure = 0;
+
+    prevcurStep = 0;
+    prevcurBeat = 0;
+    prevcurMeasure = 0;
 }
 
 void Conductor::changeBPM(float newbpm)
@@ -22,7 +32,7 @@ void Conductor::changeBPM(float newbpm)
 void Conductor::updateBeats(float elapsed)
 {
     swagTimer += elapsed;
-    curStepFloat = swagTimer * bpm / 60.0f * 4.0f;
+    curStepFloat = (swagTimer / (15000 / bpm) * 1000);
 
     curStep = std::floor(curStepFloat);
     curBeat = std::floor(curStepFloat / stepsPerBeat);

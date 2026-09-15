@@ -16,6 +16,8 @@ class SoundManager
         void clear();
 
         void update(float elapsed);
+
+        int current_position_seconds;
 };
 
 extern SoundManager sounds;
