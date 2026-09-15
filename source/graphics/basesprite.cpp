@@ -87,7 +87,7 @@ void BaseSprite::addAnimFrames(const std::string& name, const std::string& prefi
 
     for (int index : indices)
     {
-        auto frameIt = std::find_if(it->frames.begin(), it->frames.end(), [&](const AtlasFrame& frame) {return frame.index == index;});
+        auto frameIt = std::find_if(it -> frames.begin(), it -> frames.end(), [&](const AtlasFrame& frame) {return frame.index == index;});
         if (frameIt != it -> frames.end()) anim.frames.push_back(*frameIt);
     }
 
