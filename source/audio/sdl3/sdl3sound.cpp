@@ -49,14 +49,8 @@ SDL3SoundFE::~SDL3SoundFE()
 
 void SDL3SoundFE::play()
 {
-    printf("Playing audio\n");
-
     if (stream == NULL) return;
-
-    if (!SDL_ResumeAudioStreamDevice(stream))
-    {
-        printf("Failed to play audio: %s\n", SDL_GetError());
-    }
+    SDL_ResumeAudioStreamDevice(stream);
 }
 
 void SDL3SoundFE::pause()
