@@ -6,16 +6,17 @@
 #include "../../rendering/sdl3/window.hpp"
 #include "../../rendering/window.hpp"
 #include "sdl3sprite.hpp"
+#include "../cppanimate.hpp"
 #include "../../util/coolutil.hpp"
 
 void SDL3Sprite::create(const std::string& path, const std::string& type)
 {
     auto mods = listDirectory("mods");
     modName = (mods && !mods -> empty()) ? (*mods)[0] : "none";
-    std::string assetPath = fileExists("mods/" + modName + "/" + path + ".png") ? "mods/" + modName + "/" : "assets/";
 
 	if(type != "animateatlas" && type != "multianimate") 
 	{
+        std::string assetPath = fileExists("mods/" + modName + "/" + path + ".png") ? "mods/" + modName + "/" : "assets/";
 		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), (assetPath + path + ".png").c_str());
 		if (type == "sparrow") loadAtlas(assetPath + path + ".xml");
 	}
@@ -25,8 +26,8 @@ void SDL3Sprite::create(const std::string& path, const std::string& type)
 
 SDL3Sprite::SDL3Sprite(const std::string& path, const std::string& type)
 {
-	create(path, type);
 	spriteType = type;
+	create(path, type);
 }
 
 void SDL3Sprite::render()

@@ -14,5 +14,5 @@ class SDL3Sprite : public BaseSprite
         void create(const std::string& path, const std::string& type) override;
         void render() override;
     private:
-        SDL_Texture *texture;
+        SDL_Texture *texture = nullptr;
 };
