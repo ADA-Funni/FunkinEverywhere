@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "spritemanager.hpp"
-#include "funkinsprite.hpp"
+#include "basesprite.hpp"
 
 SpriteManager sprites;
 

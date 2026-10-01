@@ -1,6 +1,6 @@
 #include "basestate.hpp"
-#include "../../audio/funkinsound.hpp"
-#include "../../graphics/funkinsprite.hpp"
+#include "../../audio/basesound.hpp"
+#include "../../graphics/basesprite.hpp"
 
 class TitleState : public BaseState 
 {

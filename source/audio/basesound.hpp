@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -19,4 +20,24 @@ class BaseSound
         virtual void stopMusic();
 
         virtual void update(float elapsed);
+};
+
+class FunkinSound
+{
+    friend class SoundManager;
+
+    private:
+        std::unique_ptr<BaseSound> sound;
+
+    public:
+        FunkinSound(const std::string& path, const std::string& type = "none");
+
+        void play();
+        void pause();
+
+        void playMusic();
+        void pauseMusic();
+        void stopMusic();
+
+        void update(float elapsed);
 };

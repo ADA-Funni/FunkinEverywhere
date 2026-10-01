@@ -7,7 +7,7 @@
 #endif
 
 #include "soundmanager.hpp"
-#include "funkinsound.hpp"
+#include "basesound.hpp"
 
 SoundManager sounds;
 

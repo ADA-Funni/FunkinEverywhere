@@ -1,2 +1,2 @@
-#include "../../graphics/funkinsprite.hpp"
+#include "../../graphics/basesprite.hpp"
 #include "../../graphics/spritemanager.hpp"
