@@ -6,7 +6,6 @@
 #include "../../rendering/sdl3/window.hpp"
 #include "../../rendering/window.hpp"
 #include "sdl3sprite.hpp"
-#include "../cppanimate.hpp"
 #include "../../util/coolutil.hpp"
 
 void SDL3Sprite::create(const std::string& path, const std::string& type)
