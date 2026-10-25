@@ -122,9 +122,6 @@ void SDL3Sprite::render()
 
     int daindices[6] = {0, 1, 2, 2, 3, 0};
 
-    SDL_FRect fdrect = {drect.x, drect.y, drect.w, drect.h};
-    SDL_FRect fsrect = {srect.x, srect.y, srect.w, srect.h};
-
     SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, vertices, 4, daindices, 6);
 }
 
