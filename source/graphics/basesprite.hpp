@@ -39,6 +39,13 @@ struct Animation
     bool flipY = false;
 };
 
+struct Color
+{
+    float r = 1.0f;
+    float g = 1.0f;
+    float b = 1.0f;
+};
+
 class SpriteRenderParams
 {
     public:
@@ -61,6 +68,7 @@ class SpriteRenderParams
         bool flipY = false;
 
         bool visible = true;
+        Color color;
         std::string blend = "none";
 };
 

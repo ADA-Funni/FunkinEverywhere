@@ -114,10 +114,10 @@ void SDL3Sprite::render()
     SDL_FPoint p_bl = {(drect.x - (stuff.skewX / 2.0f)) - centerX, ((drect.y + drect.h) + (stuff.skewY / 2.0f)) - centerY};
 
     SDL_Vertex vertices[4] = {
-        {{centerX + (p_tl.x * cosA - p_tl.y * sinA), centerY + (p_tl.x * sinA + p_tl.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u0, v0}}, // tl
-        {{centerX + (p_tr.x * cosA - p_tr.y * sinA), centerY + (p_tr.x * sinA + p_tr.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u1, v0}}, // tr
-        {{centerX + (p_br.x * cosA - p_br.y * sinA), centerY + (p_br.x * sinA + p_br.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u1, v1}}, // br
-        {{centerX + (p_bl.x * cosA - p_bl.y * sinA), centerY + (p_bl.x * sinA + p_bl.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u0, v1}} // bl
+        {{centerX + (p_tl.x * cosA - p_tl.y * sinA), centerY + (p_tl.x * sinA + p_tl.y * cosA)}, {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha}, {u0, v0}},
+        {{centerX + (p_tr.x * cosA - p_tr.y * sinA), centerY + (p_tr.x * sinA + p_tr.y * cosA)}, {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha}, {u1, v0}},
+        {{centerX + (p_br.x * cosA - p_br.y * sinA), centerY + (p_br.x * sinA + p_br.y * cosA)}, {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha}, {u1, v1}},
+        {{centerX + (p_bl.x * cosA - p_bl.y * sinA), centerY + (p_bl.x * sinA + p_bl.y * cosA)}, {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha}, {u0, v1}}
     };
 
     int daindices[6] = {0, 1, 2, 2, 3, 0};
