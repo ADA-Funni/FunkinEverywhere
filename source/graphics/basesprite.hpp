@@ -59,6 +59,8 @@ class SpriteRenderParams
         float originY = 0.0f;
         bool flipX = false;
         bool flipY = false;
+
+        bool visible = true;
         std::string blend = "none";
 };
 

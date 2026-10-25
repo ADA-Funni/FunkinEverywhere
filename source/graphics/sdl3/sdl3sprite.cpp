@@ -32,6 +32,8 @@ SDL3Sprite::SDL3Sprite(const std::string& path, const std::string& type)
 
 void SDL3Sprite::render()
 {
+    if (!stuff.visible) return;
+    
     if (!texture) return;
 
     float texWidth, texHeight;
@@ -72,11 +74,32 @@ void SDL3Sprite::render()
     drect.w = srect.w * stuff.scaleX;
     drect.h = srect.h * stuff.scaleY;
 
-    float u0 = srect.x / texWidth;
-    float v0 = srect.y / texHeight;
+    float u0 = 0.0f;
+    float u1 = 0.0f;
+    float v0 = 0.0f;
+    float v1 = 0.0f;
 
-    float u1 = (srect.x + srect.w) / texWidth;
-    float v1 = (srect.y + srect.h) / texHeight;
+    if (stuff.flipX)
+    {
+        u0 = (srect.x + srect.w) / texWidth;
+        u1 = srect.x / texWidth;
+    }
+    else
+    {
+        u0 = srect.x / texWidth;
+        u1 = (srect.x + srect.w) / texWidth;
+    }
+
+    if (stuff.flipY)
+    {
+        v0 = (srect.y + srect.h) / texHeight;
+        v1 = srect.y / texHeight;
+    }
+    else
+    {
+        v0 = srect.y / texHeight;
+        v1 = (srect.y + srect.h) / texHeight;
+    }
 
     float rad = stuff.angle * (std::acos(-1.0f) / 180.0f);
     float cosA = cosf(rad);
@@ -91,10 +114,10 @@ void SDL3Sprite::render()
     SDL_FPoint p_bl = {(drect.x - (stuff.skewX / 2.0f)) - centerX, ((drect.y + drect.h) + (stuff.skewY / 2.0f)) - centerY};
 
     SDL_Vertex vertices[4] = {
-        {{centerX + (p_tl.x * cosA - p_tl.y * sinA), centerY + (p_tl.x * sinA + p_tl.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v0}}, // tl
-        {{centerX + (p_tr.x * cosA - p_tr.y * sinA), centerY + (p_tr.x * sinA + p_tr.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v0}}, // tr
-        {{centerX + (p_br.x * cosA - p_br.y * sinA), centerY + (p_br.x * sinA + p_br.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v1}}, // br
-        {{centerX + (p_bl.x * cosA - p_bl.y * sinA), centerY + (p_bl.x * sinA + p_bl.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v1}} // bl
+        {{centerX + (p_tl.x * cosA - p_tl.y * sinA), centerY + (p_tl.x * sinA + p_tl.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u0, v0}}, // tl
+        {{centerX + (p_tr.x * cosA - p_tr.y * sinA), centerY + (p_tr.x * sinA + p_tr.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u1, v0}}, // tr
+        {{centerX + (p_br.x * cosA - p_br.y * sinA), centerY + (p_br.x * sinA + p_br.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u1, v1}}, // br
+        {{centerX + (p_bl.x * cosA - p_bl.y * sinA), centerY + (p_bl.x * sinA + p_bl.y * cosA)}, {1.0f, 1.0f, 1.0f, stuff.alpha}, {u0, v1}} // bl
     };
 
     int daindices[6] = {0, 1, 2, 2, 3, 0};
