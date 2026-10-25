@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <cmath>
 #include <string>
 #include <iostream>
 
@@ -77,11 +78,23 @@ void SDL3Sprite::render()
     float u1 = (srect.x + srect.w) / texWidth;
     float v1 = (srect.y + srect.h) / texHeight;
 
+    float rad = stuff.angle * (std::acos(-1.0f) / 180.0f);
+    float cosA = cosf(rad);
+    float sinA = sinf(rad);
+
+    float centerX = drect.x + (drect.w / 2.0f);
+    float centerY = drect.y + (drect.h / 2.0f);
+
+    SDL_FPoint p_tl = {(drect.x + (stuff.skewX / 2.0f)) - centerX, (drect.y + (stuff.skewY / 2.0f)) - centerY};
+    SDL_FPoint p_tr = {((drect.x + drect.w) + (stuff.skewX / 2.0f)) - centerX, (drect.y - (stuff.skewY / 2.0f)) - centerY};
+    SDL_FPoint p_br = {((drect.x + drect.w) - (stuff.skewX / 2.0f)) - centerX, ((drect.y + drect.h) - (stuff.skewY / 2.0f)) - centerY};
+    SDL_FPoint p_bl = {(drect.x - (stuff.skewX / 2.0f)) - centerX, ((drect.y + drect.h) + (stuff.skewY / 2.0f)) - centerY};
+
     SDL_Vertex vertices[4] = {
-        { {drect.x + (stuff.skewX / 2), drect.y + (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v0} }, // tl
-        { {(drect.x + drect.w) + (stuff.skewX / 2), drect.y - (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v0} }, // tr
-        { {(drect.x + drect.w) - (stuff.skewX / 2), (drect.y + drect.h) - (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v1} }, // br
-        { {drect.x - (stuff.skewX / 2), (drect.y + drect.h) + (stuff.skewY / 2)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v1} } // bl
+        {{centerX + (p_tl.x * cosA - p_tl.y * sinA), centerY + (p_tl.x * sinA + p_tl.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v0}}, // tl
+        {{centerX + (p_tr.x * cosA - p_tr.y * sinA), centerY + (p_tr.x * sinA + p_tr.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v0}}, // tr
+        {{centerX + (p_br.x * cosA - p_br.y * sinA), centerY + (p_br.x * sinA + p_br.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u1, v1}}, // br
+        {{centerX + (p_bl.x * cosA - p_bl.y * sinA), centerY + (p_bl.x * sinA + p_bl.y * cosA)}, {1.0f, 1.0f, 1.0f, 1.0f}, {u0, v1}} // bl
     };
 
     int daindices[6] = {0, 1, 2, 2, 3, 0};
