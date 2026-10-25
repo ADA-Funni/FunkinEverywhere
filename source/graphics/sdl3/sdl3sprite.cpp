@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <algorithm>
 #include <cmath>
 #include <string>
 #include <iostream>
@@ -8,6 +9,29 @@
 #include "../../rendering/window.hpp"
 #include "sdl3sprite.hpp"
 #include "../../util/coolutil.hpp"
+#include "../basesprite.hpp"
+
+namespace
+{
+    AffineMatrix composeMatrix(const AffineMatrix& parent, const AffineMatrix& child)
+    {
+        AffineMatrix result;
+
+        result.a = parent.a * child.a + parent.c * child.b;
+        result.b = parent.b * child.a + parent.d * child.b;
+        result.c = parent.a * child.c + parent.c * child.d;
+        result.d = parent.b * child.c + parent.d * child.d;
+        result.tx = parent.a * child.tx + parent.c * child.ty + parent.tx;
+        result.ty = parent.b * child.tx + parent.d * child.ty + parent.ty;
+
+        return result;
+    }
+
+    SDL_FPoint transformPoint(const AffineMatrix& matrix, float x, float y)
+    {
+        return {matrix.a * x + matrix.c * y + matrix.tx, matrix.b * x + matrix.d * y + matrix.ty};
+    }
+}
 
 void SDL3Sprite::create(const std::string& path, const std::string& type)
 {
@@ -19,6 +43,12 @@ void SDL3Sprite::create(const std::string& path, const std::string& type)
         std::string assetPath = fileExists("mods/" + modName + "/" + path + ".png") ? "mods/" + modName + "/" : "assets/";
 		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), (assetPath + path + ".png").c_str());
 		if (type == "sparrow") loadAtlas(assetPath + path + ".xml");
+	}
+	else
+	{
+        std::string assetPath = fileExists("mods/" + modName + "/" + path + "/spritemap1.png") ? "mods/" + modName + "/" : "assets/";
+		texture = IMG_LoadTexture(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), (assetPath + path + "/spritemap1.png").c_str());
+		loadSpritemap(assetPath + path);
 	}
 
 	SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
@@ -33,8 +63,18 @@ SDL3Sprite::SDL3Sprite(const std::string& path, const std::string& type)
 void SDL3Sprite::render()
 {
     if (!stuff.visible) return;
-    
     if (!texture) return;
+
+    if (spriteType == "animateatlas" || spriteType == "multianimate")
+    {
+        if (curAnim < 0 || curAnim >= static_cast<int>(anims.size())) return;
+
+        const Animation& animation = anims[curAnim];
+        if (animation.frames.empty() || curFrame < 0 || curFrame >= static_cast<int>(animation.frames.size())) return;
+
+        renderSpritemap(animation.frames[curFrame].index);
+        return;
+    }
 
     float texWidth, texHeight;
     SDL_GetTextureSize(texture, &texWidth, &texHeight);
@@ -123,6 +163,147 @@ void SDL3Sprite::render()
     int daindices[6] = {0, 1, 2, 2, 3, 0};
 
     SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, vertices, 4, daindices, 6);
+}
+
+void SDL3Sprite::renderSpritemap(int frame)
+{
+    if (spritemapData.rootSymbolName.empty()) return;
+
+    const float radians = stuff.angle * (std::acos(-1.0f) / 180.0f);
+    const float c = std::cos(radians);
+    const float s = std::sin(radians);
+
+    AffineMatrix root;
+
+    root.a = c * stuff.scaleX;
+    root.b = s * stuff.scaleX;
+    root.c = -s * stuff.scaleY;
+    root.d = c * stuff.scaleY;
+
+    root.tx = stuff.x - root.a * stuff.originX - root.c * stuff.originY;
+    root.ty = stuff.y - root.b * stuff.originX - root.d * stuff.originY;
+
+    renderSymbol(spritemapData.rootSymbolName, frame, root, 0);
+}
+
+void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const AffineMatrix& parentMatrix, int recursionDepth)
+{
+    if (recursionDepth >= 32) return;
+
+    auto symbolIt = spritemapData.symbols.find(symbolName);
+    if (symbolIt == spritemapData.symbols.end()) return;
+
+    const SpritemapSymbol& symbol = symbolIt -> second;
+
+    for (int layerIndex = static_cast<int>(symbol.layers.size()) - 1; layerIndex >= 0; --layerIndex)
+    {
+        const SpritemapKeyframe* keyframe = symbol.getKeyframe(layerIndex, frame);
+        if (!keyframe) continue;
+
+        for (const SpritemapElement& element : keyframe -> elements)
+        {
+            if (element.isAtlasSprite)
+            {
+                const AffineMatrix matrix = composeMatrix(parentMatrix, element.asi.mx);
+                renderPiece(element.asi.pieceName, matrix);
+            }
+            else
+            {
+                auto childIt = spritemapData.symbols.find(element.si.symbolName);
+                if (childIt == spritemapData.symbols.end()) continue;
+
+                const SpritemapSymbol& child = childIt -> second;
+                const int childDuration = child.duration();
+                if (childDuration <= 0) continue;
+
+                AffineMatrix childMatrix = composeMatrix(parentMatrix, element.si.mx);
+                
+                // removed pivoting because i cant get it to work
+                // childMatrix.tx += element.si.trp.x - (childMatrix.a * element.si.trp.x + childMatrix.c * element.si.trp.y);
+                // childMatrix.ty += element.si.trp.y - (childMatrix.b * element.si.trp.x + childMatrix.d * element.si.trp.y);
+
+                int childFrame = element.si.firstFrame + (frame - keyframe -> index);
+
+                const std::string& loopType = element.si.loopType;
+                const bool loops = loopType == "LOOP" || loopType == "loop" || loopType == "1";
+
+                if (loops)
+                {
+                    childFrame %= childDuration;
+                    if (childFrame < 0) childFrame += childDuration;
+                }
+                else
+                {
+                    if (childFrame < 0) childFrame = 0;
+                    if (childFrame >= childDuration) childFrame = childDuration - 1;
+                }
+
+                renderSymbol(element.si.symbolName, childFrame, childMatrix, recursionDepth + 1);
+            }
+        }
+    }
+}
+
+void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& matrix)
+{
+    if (!texture) return;
+
+    auto pieceIt = spritemapData.atlas.find(pieceName);
+    if (pieceIt == spritemapData.atlas.end()) return;
+
+    const SpritemapPiece& piece = pieceIt -> second;
+
+    float texWidth = 0.0f;
+    float texHeight = 0.0f;
+
+    if (!SDL_GetTextureSize(texture, &texWidth, &texHeight)) return;
+    if (texWidth <= 0.0f || texHeight <= 0.0f || piece.w <= 0 || piece.h <= 0) return;
+
+    const float width = static_cast<float>(piece.rotated ? piece.h : piece.w);
+    const float height = static_cast<float>(piece.rotated ? piece.w : piece.h);
+
+    SDL_FPoint positions[4] = {
+        transformPoint(matrix, 0.0f, 0.0f),
+        transformPoint(matrix, width, 0.0f),
+        transformPoint(matrix, width, height),
+        transformPoint(matrix, 0.0f, height)
+    };
+
+    float left = static_cast<float>(piece.x) / texWidth;
+    float right = static_cast<float>(piece.x + piece.w) / texWidth;
+    float top = static_cast<float>(piece.y) / texHeight;
+    float bottom = static_cast<float>(piece.y + piece.h) / texHeight;
+
+    SDL_FPoint uv[4];
+
+    if (piece.rotated)
+    {
+        uv[0] = {right, top};
+        uv[1] = {right, bottom};
+        uv[2] = {left, bottom};
+        uv[3] = {left, top};
+    }
+    else
+    {
+        uv[0] = {left, top};
+        uv[1] = {right, top};
+        uv[2] = {right, bottom};
+        uv[3] = {left, bottom};
+    }
+
+    SDL_Vertex vertices[4];
+
+    for (int i = 0; i < 4; ++i)
+    {
+        vertices[i].position = positions[i];
+        vertices[i].tex_coord = uv[i];
+
+        vertices[i].color = {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha};
+    }
+
+    const int indices[6] = {0, 1, 2, 2, 3, 0};
+
+    SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow->getRenderer()), texture, vertices, 4, indices, 6);
 }
 
 SDL3Sprite::~SDL3Sprite()

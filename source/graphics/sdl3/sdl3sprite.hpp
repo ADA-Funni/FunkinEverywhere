@@ -13,6 +13,10 @@ class SDL3Sprite : public BaseSprite
 
         void create(const std::string& path, const std::string& type) override;
         void render() override;
+
+        void renderSpritemap(int frame);
+        void renderSymbol(const std::string& symbolName, int frame, const AffineMatrix& parentMatrix, int recursionDepth);
+        void renderPiece(const std::string& pieceName, const AffineMatrix& matrix);
     private:
         SDL_Texture *texture = nullptr;
 };

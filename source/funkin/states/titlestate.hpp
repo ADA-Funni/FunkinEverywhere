@@ -18,6 +18,7 @@ class TitleState : public BaseState
 
 		FunkinSprite* logoBl;
 		FunkinSprite* gfDance;
+		FunkinSprite* titleText;
 		
 		FunkinSound* freakyMenu;
 		
