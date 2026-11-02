@@ -195,7 +195,7 @@ void SDL3Sprite::renderSpritemap(int frame)
 
             if (!keyframe) continue;
 
-            for (const SpritemapElement& element : keyframe->elements)
+            for (const SpritemapElement& element : keyframe -> elements)
             {
                 if (element.isAtlasSprite)
                 {
@@ -203,7 +203,7 @@ void SDL3Sprite::renderSpritemap(int frame)
                     auto pieceIt = spritemapData.atlas.find(element.asi.pieceName);
                     if (pieceIt == spritemapData.atlas.end()) continue;
 
-                    const SpritemapPiece& piece = pieceIt->second;
+                    const SpritemapPiece& piece = pieceIt -> second;
 
                     const float width = static_cast<float>(piece.rotated ? piece.h : piece.w);
                     const float height = static_cast<float>(piece.rotated ? piece.w : piece.h);
@@ -235,7 +235,7 @@ void SDL3Sprite::renderSpritemap(int frame)
                     if (childDuration <= 0) continue;
 
                     AffineMatrix childMatrix = composeMatrix(parentMatrix, element.si.mx);
-                    int childFrame = element.si.firstFrame + (symbolFrame - keyframe->index);
+                    int childFrame = element.si.firstFrame + (symbolFrame - keyframe -> index);
 
                     const std::string& loopType = element.si.loopType;
                     const bool loops = loopType == "LOOP" || loopType == "loop" || loopType == "1";
@@ -267,16 +267,16 @@ void SDL3Sprite::renderSpritemap(int frame)
     const float centerX = (minX + maxX) * 0.5f;
     const float centerY = (minY + maxY) * 0.5f;
 
-    const float radians = stuff.angle * (std::acos(-1.0f) / 180.0f);
-    const float c = std::cos(radians);
-    const float s = std::sin(radians);
+    const float rad = stuff.angle * (std::acos(-1.0f) / 180.0f);
+    const float cos = std::cos(rad);
+    const float sin = std::sin(rad);
 
     AffineMatrix root;
 
-    root.a = c * stuff.scaleX;
-    root.b = s * stuff.scaleX;
-    root.c = -s * stuff.scaleY;
-    root.d = c * stuff.scaleY;
+    root.a = cos * stuff.scaleX;
+    root.b = sin * stuff.scaleX;
+    root.c = -sin * stuff.scaleY;
+    root.d = cos * stuff.scaleY;
 
     root.tx = stuff.x + (centerX - minX) - root.a * centerX - root.c * centerY;
     root.ty = stuff.y + (centerY - minY) - root.b * centerX - root.d * centerY;
