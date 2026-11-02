@@ -4,6 +4,23 @@
 #include <vector>
 #include <map>
 
+struct SpritemapStyle
+{
+    float redMultiplier = 1.0f;
+    float greenMultiplier = 1.0f;
+    float blueMultiplier = 1.0f;
+    float alphaMultiplier = 1.0f;
+
+    float redOffset = 0.0f;
+    float greenOffset = 0.0f;
+    float blueOffset = 0.0f;
+    float alphaOffset = 0.0f;
+
+    std::string blend;
+    bool hasBlend = false;
+    bool hasColor = false;
+};
+
 struct SpritemapPiece
 {
     std::string name;
@@ -43,6 +60,7 @@ struct SymbolInstance
     int firstFrame;
     AffineMatrix mx;
     Pivot trp;
+    SpritemapStyle style;
 };
 
 struct SpritemapElement
@@ -57,6 +75,8 @@ struct SpritemapKeyframe
     int index;
     int duration;
     std::vector<SpritemapElement> elements;
+    std::string blend;
+    bool hasBlend = false;
 };
 
 struct SpritemapLayer

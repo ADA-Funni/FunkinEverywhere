@@ -28,6 +28,38 @@ namespace
     }
 }
 
+static SpritemapStyle combineStyles(const SpritemapStyle& parent, const SpritemapStyle& child)
+{
+    SpritemapStyle result = parent;
+
+    if (child.hasColor)
+    {
+        result.redOffset = parent.redOffset * child.redMultiplier + child.redOffset;
+        result.greenOffset = parent.greenOffset * child.greenMultiplier + child.greenOffset;
+        result.blueOffset = parent.blueOffset * child.blueMultiplier + child.blueOffset;
+        result.alphaOffset = parent.alphaOffset * child.alphaMultiplier + child.alphaOffset;
+
+        result.redMultiplier *= child.redMultiplier;
+        result.greenMultiplier *= child.greenMultiplier;
+        result.blueMultiplier *= child.blueMultiplier;
+        result.alphaMultiplier *= child.alphaMultiplier;
+    }
+
+    if (child.hasBlend)
+    {
+        result.blend = child.blend;
+        result.hasBlend = true;
+    }
+
+    result.hasColor = parent.hasColor || child.hasColor;
+    return result;
+}
+
+static float applyColorTransform(float value, float multiplier, float offset)
+{
+    return std::clamp(value * multiplier + offset / 255.0f, 0.0f, 1.0f);
+}
+
 void SDL3Sprite::create(const std::string& path, const std::string& type)
 {
     auto mods = listDirectory("mods");
@@ -281,10 +313,10 @@ void SDL3Sprite::renderSpritemap(int frame)
     root.tx = stuff.x + (centerX - minX) - root.a * centerX - root.c * centerY;
     root.ty = stuff.y + (centerY - minY) - root.b * centerX - root.d * centerY;
 
-    renderSymbol(spritemapData.rootSymbolName, frame, root, 0);
+    renderSymbol(spritemapData.rootSymbolName, frame, root, SpritemapStyle{}, 0);
 }
 
-void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const AffineMatrix& parentMatrix, int recursionDepth)
+void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const AffineMatrix& parentMatrix, const SpritemapStyle& parentStyle, int recursionDepth)
 {
     if (recursionDepth >= 32) return;
 
@@ -298,12 +330,20 @@ void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const Af
         const SpritemapKeyframe* keyframe = symbol.getKeyframe(layerIndex, frame);
         if (!keyframe) continue;
 
+        SpritemapStyle frameStyle = parentStyle;
+
+        if (keyframe -> hasBlend)
+        {
+            frameStyle.blend = keyframe -> blend;
+            frameStyle.hasBlend = true;
+        }
+
         for (const SpritemapElement& element : keyframe -> elements)
         {
             if (element.isAtlasSprite)
             {
                 const AffineMatrix matrix = composeMatrix(parentMatrix, element.asi.mx);
-                renderPiece(element.asi.pieceName, matrix);
+                renderPiece(element.asi.pieceName, matrix, frameStyle);
             }
             else
             {
@@ -315,6 +355,7 @@ void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const Af
                 if (childDuration <= 0) continue;
 
                 AffineMatrix childMatrix = composeMatrix(parentMatrix, element.si.mx);
+                const SpritemapStyle childStyle = combineStyles(frameStyle, element.si.style);
 
                 int childFrame = element.si.firstFrame + (frame - keyframe -> index);
 
@@ -332,13 +373,13 @@ void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const Af
                     if (childFrame >= childDuration) childFrame = childDuration - 1;
                 }
 
-                renderSymbol(element.si.symbolName, childFrame, childMatrix, recursionDepth + 1);
+                renderSymbol(element.si.symbolName, childFrame, childMatrix, childStyle, recursionDepth + 1);
             }
         }
     }
 }
 
-void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& matrix)
+void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& matrix, const SpritemapStyle& style)
 {
     if (!texture) return;
 
@@ -391,12 +432,17 @@ void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& m
         vertices[i].position = positions[i];
         vertices[i].tex_coord = uv[i];
 
-        vertices[i].color = {stuff.color.r, stuff.color.g, stuff.color.b, stuff.alpha};
+        vertices[i].color = {
+            applyColorTransform(stuff.color.r, style.redMultiplier, style.redOffset),
+            applyColorTransform(stuff.color.g, style.greenMultiplier, style.greenOffset),
+            applyColorTransform(stuff.color.b, style.blueMultiplier, style.blueOffset),
+            applyColorTransform(stuff.alpha, style.alphaMultiplier, style.alphaOffset)
+        };
     }
 
     const int indices[6] = {0, 1, 2, 2, 3, 0};
 
-    SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow->getRenderer()), texture, vertices, 4, indices, 6);
+    SDL_RenderGeometry(static_cast<SDL_Renderer*>(globalWindow -> getRenderer()), texture, vertices, 4, indices, 6);
 }
 
 SDL3Sprite::~SDL3Sprite()

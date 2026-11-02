@@ -338,6 +338,63 @@ bool SpritemapParser::parseAtlas(const std::string& path, SpritemapData& out)
     return !out.atlas.empty();
 }
 
+static SpritemapStyle parseSpritemapStyle(const std::string& siStr)
+{
+    SpritemapStyle style;
+
+    std::string colorObj = jsonGetObject(siStr, "C");
+
+    if (!colorObj.empty())
+    {
+        style.hasColor = true;
+
+        std::string mode = jsonGetRaw(colorObj, "M");
+
+        auto getColorValue = [&](const std::string& key, float fallback)
+        {
+            std::string raw = jsonGetRaw(colorObj, key);
+            if (raw.empty())
+                return fallback;
+
+            try
+            {
+                return std::stof(raw);
+            }
+            catch (...)
+            {
+                return fallback;
+            }
+        };
+
+        if (mode == "CA")
+        {
+            style.alphaMultiplier = getColorValue("AM", 1.0f);
+        }
+        else if (mode == "AD")
+        {
+            style.redMultiplier   = getColorValue("RM", 1.0f);
+            style.greenMultiplier = getColorValue("GM", 1.0f);
+            style.blueMultiplier  = getColorValue("BM", 1.0f);
+            style.alphaMultiplier = getColorValue("AM", 1.0f);
+
+            style.redOffset   = getColorValue("RO", 0.0f);
+            style.greenOffset = getColorValue("GO", 0.0f);
+            style.blueOffset  = getColorValue("BO", 0.0f);
+            style.alphaOffset = getColorValue("AO", 0.0f);
+        }
+    }
+
+    std::string blend = jsonGetRaw(siStr, "B");
+
+    if (!blend.empty())
+    {
+        style.blend = blend;
+        style.hasBlend = true;
+    }
+
+    return style;
+}
+
 static SpritemapSymbol parseSymbol(const std::string& symStr)
 {
     SpritemapSymbol sym;
@@ -388,6 +445,9 @@ static SpritemapSymbol parseSymbol(const std::string& symStr)
                         elem.si.firstFrame = jsonGetInt(siObj, "FF");
                         elem.si.mx = parseMX(siObj);
                         elem.si.trp = parseTRP(siObj);
+
+                        elem.si.style = parseSpritemapStyle(siObj);
+
                         kf.elements.push_back(elem);
                     }
                 });
