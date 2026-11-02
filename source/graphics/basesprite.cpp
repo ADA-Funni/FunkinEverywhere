@@ -7,6 +7,7 @@
 #include <string>
 #include <cstdlib>
 #include <functional>
+#include <limits>
 #include <iostream>
 #include <vector>
 #include <cctype>
@@ -412,8 +413,8 @@ bool SpritemapParser::parseAnimation(const std::string& path, SpritemapData& out
     std::string mdObj = jsonGetObject(src, "MD");
     if (!mdObj.empty())
     {
-        out.canvasW   = jsonGetFloat(mdObj, "W", 1280.f);
-        out.canvasH   = jsonGetFloat(mdObj, "H", 720.f);
+        out.canvasW = jsonGetFloat(mdObj, "W", 1280.f);
+        out.canvasH = jsonGetFloat(mdObj, "H", 720.f);
         out.frameRate = jsonGetInt(mdObj, "FRT", 24);
     }
 
