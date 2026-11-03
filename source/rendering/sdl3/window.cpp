@@ -1,11 +1,19 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 
+#include "../../input/inputmanager.hpp"
+#include "../../input/sdl3/sdl3input.hpp"
 #include "window.hpp"
 
 bool WindowSDL3::create(int width, int height, const std::string &title)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
+    {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
+    if (!SDL_Init(SDL_INIT_GAMEPAD))
     {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return false;
@@ -117,7 +125,12 @@ void* WindowSDL3::getRenderer()
 void WindowSDL3::pollEvents()
 {
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event))
+    {
+        keyboardHandler.handleEvent(event, inputManager);
+        controllerHandler.handleEvent(event, inputManager);
+        touchHandler.handleEvent(event, inputManager);
+
         switch (event.type) 
         {
             case SDL_EVENT_QUIT:

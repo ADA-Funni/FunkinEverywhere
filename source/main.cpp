@@ -6,6 +6,7 @@
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
 #include "funkin/conductor.hpp"
+#include "input/inputmanager.hpp"
 #include "util/coolutil.hpp"
 
 WindowFE *globalWindow = nullptr;
@@ -32,6 +33,7 @@ int main(int argc, char **argv)
     {
         float elapsed = globalWindow -> calcElapsed();
 
+        inputManager.update();
         sprites.update(elapsed);
         sounds.update(elapsed);
         conductor.updateBeats(elapsed);
