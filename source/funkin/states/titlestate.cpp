@@ -3,6 +3,7 @@
 #include "../../audio/soundmanager.hpp"
 #include "../../graphics/basesprite.hpp"
 #include "../../graphics/spritemanager.hpp"
+#include "../../input/inputmanager.hpp"
 #include "../../rendering/window.hpp"
 #include "../conductor.hpp"
 
@@ -35,11 +36,15 @@ void TitleState::startIntro()
     titleText -> getParams().x = 100;
     titleText -> getParams().y = globalWindow -> getHeight() * 0.8;
     titleText -> addSpritemapAnim("idle", "Idle", {}, 24, true);
+    titleText -> addSpritemapAnim("press", "Confirm", {}, 24, true);
     titleText -> playAnim("idle");
     sprites.add(titleText);
 
     freakyMenu = new FunkinSound("ui/main-menu/freaky-menu/freaky-menu", "music");
     sounds.add(freakyMenu);
+
+    confirmSound = new FunkinSound("ui/main-menu/confirm-menu", "sound");
+    sounds.add(confirmSound);
 }
 
 void TitleState::create()
@@ -52,7 +57,11 @@ void TitleState::create()
 
 void TitleState::update(float elapsed)
 {
-    
+    if(inputManager.justPressed(FUNKIN_ACTION::ACCEPT))
+    {
+        titleText -> playAnim("press");
+        confirmSound -> play();
+    }
 }
 
 void TitleState::destroy()

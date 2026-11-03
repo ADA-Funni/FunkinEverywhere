@@ -138,18 +138,3 @@ void InputManager::clear()
 }
 
 InputManager inputManager;
-
-// TODO: rewrite this because this is gonna become a long ass list if I keep it this way
-
-void initInput()
-{
-    inputManager.init();
-    controllerHandler.init(inputManager);
-
-    inputManager.bind(FUNKIN_ACTION::NOTE_LEFT, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_LEFT});
-    inputManager.bind(FUNKIN_ACTION::NOTE_DOWN, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_DOWN});
-    inputManager.bind(FUNKIN_ACTION::NOTE_UP, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_UP});
-    inputManager.bind(FUNKIN_ACTION::NOTE_RIGHT, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_RIGHT});
-    inputManager.bind(FUNKIN_ACTION::ACCEPT, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_RETURN});
-    inputManager.bind(FUNKIN_ACTION::BACK, {INPUT_TYPE::KEYBOARD, SDL_SCANCODE_ESCAPE});
-}

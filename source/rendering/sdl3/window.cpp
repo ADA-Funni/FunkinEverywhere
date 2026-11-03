@@ -33,6 +33,8 @@ bool WindowSDL3::create(int width, int height, const std::string &title)
 
     SDL_SetRenderLogicalPresentation(renderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     SDL_SetRenderVSync(renderer, 1);
+    
+    initInput();
 
     return true;
 }
@@ -124,6 +126,8 @@ void* WindowSDL3::getRenderer()
 
 void WindowSDL3::pollEvents()
 {
+    inputManager.update();
+
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {

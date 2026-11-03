@@ -33,12 +33,11 @@ int main(int argc, char **argv)
     {
         float elapsed = globalWindow -> calcElapsed();
 
-        inputManager.update();
+        globalWindow -> pollEvents();
         sprites.update(elapsed);
         sounds.update(elapsed);
         conductor.updateBeats(elapsed);
         states.update(elapsed);
-        globalWindow -> pollEvents();
         globalWindow -> beginFrame(0, 0, 0, 0);
         sprites.render();
         globalWindow -> endFrame(true);

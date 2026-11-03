@@ -21,6 +21,7 @@ class TitleState : public BaseState
 		FunkinSprite* titleText;
 		
 		FunkinSound* freakyMenu;
+		FunkinSound* confirmSound;
 		
 		void startIntro();
 };
