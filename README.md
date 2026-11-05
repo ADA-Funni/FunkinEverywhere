@@ -1,8 +1,9 @@
 # Funkin' Everywhere
 <img alt="Our logo" src="docs/FE_Logo.png" />
 Funkin' Everywhere is a Friday Night Funkin' fan project based on Scratch Everywhere! that allows you to play Friday Night Funkin on basically any 6th-8th generation handheld/console. This program is written in c++ and uses no generative AI outside of using it for fixing bugs if need be (I still hope to change this, I am still a little bit of a beginner at c++ but I know haxe pretty well).
-
 Sorry that my code is really unreadable lol
+
+Note that this is in a VERY EARLY STATE OF DEVELOPMENT! There might be bugs, and you currently can't even play the game because its not coded yet, only the title screen is for testing purposes.
 
 ## Compiling
 
