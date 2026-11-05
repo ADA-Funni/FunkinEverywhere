@@ -5,7 +5,7 @@
 #include "graphics/spritemanager.hpp"
 #include "rendering/sdl3/window.hpp"
 #include "funkin/states/titlestate.hpp"
-#include "funkin/conductor.hpp"
+#include "funkin/song/conductor.hpp"
 #include "input/inputmanager.hpp"
 #include "util/coolutil.hpp"
 

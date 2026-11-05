@@ -5,7 +5,7 @@
 #include "../../graphics/spritemanager.hpp"
 #include "../../input/inputmanager.hpp"
 #include "../../rendering/window.hpp"
-#include "../conductor.hpp"
+#include "../song/conductor.hpp"
 
 TitleState::TitleState()
 {
