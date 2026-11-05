@@ -19,4 +19,8 @@ class SDL3Sprite : public BaseSprite
         void renderPiece(const std::string& pieceName, const AffineMatrix& matrix, const SpritemapStyle& style);
     private:
         SDL_Texture *texture = nullptr;
+
+        SDL_Texture* spritemapRenderTexture = nullptr;
+        int spritemapRenderWidth = 0;
+        int spritemapRenderHeight = 0;
 };

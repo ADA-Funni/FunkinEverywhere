@@ -324,7 +324,74 @@ void SDL3Sprite::renderSpritemap(int frame)
     root.tx = stuff.x + (centerX - minX) - root.a * centerX - root.c * centerY;
     root.ty = stuff.y + (centerY - minY) - root.b * centerX - root.d * centerY;
 
+    // thanks google for this code lol
+    SDL_Renderer* renderer = static_cast<SDL_Renderer*>(globalWindow -> getRenderer());
+    SDL_Texture* previousTarget = SDL_GetRenderTarget(renderer);
+
+    int targetWidth = 0;
+    int targetHeight = 0;
+
+    if (previousTarget)
+    {
+        float w, h;
+        SDL_GetTextureSize(previousTarget, &w, &h);
+
+        targetWidth = static_cast<int>(w);
+        targetHeight = static_cast<int>(h);
+    }
+    else
+    {
+        if (!SDL_GetCurrentRenderOutputSize(renderer, &targetWidth, &targetHeight)) return;
+    }
+
+    if (targetWidth <= 0 || targetHeight <= 0) return;
+
+    if (!spritemapRenderTexture || spritemapRenderWidth != targetWidth || spritemapRenderHeight != targetHeight)
+    {
+        if (spritemapRenderTexture) SDL_DestroyTexture(spritemapRenderTexture);
+
+        spritemapRenderTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, targetWidth, targetHeight);
+
+        if (!spritemapRenderTexture)
+        {
+            spritemapRenderWidth = 0;
+            spritemapRenderHeight = 0;
+            SDL_Log("Failed to create spritemap render texture: %s", SDL_GetError());
+            return;
+        }
+
+        spritemapRenderWidth = targetWidth;
+        spritemapRenderHeight = targetHeight;
+
+        SDL_SetTextureBlendMode(spritemapRenderTexture, SDL_BLENDMODE_BLEND_PREMULTIPLIED);
+        SDL_SetTextureScaleMode(spritemapRenderTexture, SDL_SCALEMODE_NEAREST);
+    }
+
+    Uint8 oldR, oldG, oldB, oldA;
+    SDL_GetRenderDrawColor(renderer, &oldR, &oldG, &oldB, &oldA);
+
+    if (!SDL_SetRenderTarget(renderer, spritemapRenderTexture))
+    {
+        SDL_Log("Failed to set spritemap render target: %s", SDL_GetError());
+        return;
+    }
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+
     renderSymbol(spritemapData.rootSymbolName, frame, root, SpritemapStyle{}, 0);
+
+    SDL_SetRenderTarget(renderer, previousTarget);
+    SDL_SetRenderDrawColor(renderer, oldR, oldG, oldB, oldA);
+
+    const Uint8 finalAlpha = static_cast<Uint8>(std::lround(std::clamp(stuff.alpha, 0.0f, 1.0f) * 255.0f));
+
+    SDL_SetTextureColorMod(spritemapRenderTexture, finalAlpha, finalAlpha, finalAlpha);
+    SDL_SetTextureAlphaMod(spritemapRenderTexture, finalAlpha);
+    SDL_RenderTexture(renderer, spritemapRenderTexture, nullptr, nullptr);
+
+    SDL_SetTextureColorMod(spritemapRenderTexture, 255, 255, 255);
+    SDL_SetTextureAlphaMod(spritemapRenderTexture, 255);
 }
 
 void SDL3Sprite::renderSymbol(const std::string& symbolName, int frame, const AffineMatrix& parentMatrix, const SpritemapStyle& parentStyle, int recursionDepth)
@@ -447,7 +514,7 @@ void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& m
             applyColorTransform(stuff.color.r, style.redMultiplier, style.redOffset),
             applyColorTransform(stuff.color.g, style.greenMultiplier, style.greenOffset),
             applyColorTransform(stuff.color.b, style.blueMultiplier, style.blueOffset),
-            applyColorTransform(stuff.alpha, style.alphaMultiplier, style.alphaOffset)
+            applyColorTransform(1.0f, style.alphaMultiplier, style.alphaOffset)
         };
     }
 
@@ -458,5 +525,6 @@ void SDL3Sprite::renderPiece(const std::string& pieceName, const AffineMatrix& m
 
 SDL3Sprite::~SDL3Sprite()
 {
-	SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(spritemapRenderTexture);
 }
