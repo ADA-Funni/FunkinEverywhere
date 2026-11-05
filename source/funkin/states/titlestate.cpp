@@ -1,11 +1,5 @@
 #include "titlestate.hpp"
-#include "../../audio/basesound.hpp"
-#include "../../audio/soundmanager.hpp"
-#include "../../graphics/basesprite.hpp"
-#include "../../graphics/spritemanager.hpp"
-#include "../../input/inputmanager.hpp"
-#include "../../rendering/window.hpp"
-#include "../song/conductor.hpp"
+#include "../import.hpp"
 
 TitleState::TitleState()
 {

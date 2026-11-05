@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include "conductor.hpp"
-#include "states/basestate.hpp"
+#include "../states/basestate.hpp"
 
 Conductor conductor;
 
