@@ -298,17 +298,28 @@ void SDL3Sprite::renderSpritemap(int frame)
 
     const float centerX = (minX + maxX) * 0.5f;
     const float centerY = (minY + maxY) * 0.5f;
+    
+    const float rad = std::acos(-1.0f) / 180.0f;
 
-    const float rad = stuff.angle * (std::acos(-1.0f) / 180.0f);
-    const float cos = std::cos(rad);
-    const float sin = std::sin(rad);
+    const float rotation = stuff.angle * rad;
+    const float skewXRad = stuff.skewX * rad;
+    const float skewYRad = stuff.skewY * rad;
+
+    const float cosR = std::cos(rotation);
+    const float sinR = std::sin(rotation);
+
+    const float tanX = std::tan(skewXRad);
+    const float tanY = std::tan(skewYRad);
+
+    const float scaleX = stuff.scaleX;
+    const float scaleY = stuff.scaleY;
 
     AffineMatrix root;
 
-    root.a = cos * stuff.scaleX;
-    root.b = sin * stuff.scaleX;
-    root.c = -sin * stuff.scaleY;
-    root.d = cos * stuff.scaleY;
+    root.a = (cosR - sinR * tanY) * scaleX;
+    root.b = (sinR + cosR * tanY) * scaleX;
+    root.c = (cosR * tanX - sinR) * scaleY;
+    root.d = (sinR * tanX + cosR) * scaleY;
 
     root.tx = stuff.x + (centerX - minX) - root.a * centerX - root.c * centerY;
     root.ty = stuff.y + (centerY - minY) - root.b * centerX - root.d * centerY;
