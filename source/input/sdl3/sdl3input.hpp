@@ -1,8 +1,6 @@
 #pragma once
 
-#include "sdl3keyboardhandler.hpp"
-#include "sdl3controllerhandler.hpp"
-#include "sdl3touchhandler.hpp"
+#include "sdl3inputhandler.hpp"
 
 extern SDL3KeyboardHandler keyboardHandler;
 extern SDL3ControllerHandler controllerHandler;
